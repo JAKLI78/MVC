@@ -1,0 +1,45 @@
+﻿@model MVCTask.Models.UserModel
+
+@{
+    ViewBag.Title = "NewUser";
+}
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script type="text/javascript"> $(function() {
+    $('.date-picker').datepicker();
+})</script>
+<html>
+
+<head>
+    <title>Users</title>
+</head>
+<body>
+<div>
+    <ul>
+        <li>@ViewBag.Title</li>
+    </ul>
+    <div>
+        <div>Email: @Html.EditorFor(m => m.Email)</div>
+        <div>Name:@Html.EditorFor(m => m.Name)</div>
+        <div>Surname:@Html.EditorFor(m => m.Surname)</div>
+        <div>BirthDate: @Html.TextBox("DateBox", "", new { @class = "date-picker" })</div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        
+        
+        
+        
+    </div>
+</div>
+</body>
+</html>
+

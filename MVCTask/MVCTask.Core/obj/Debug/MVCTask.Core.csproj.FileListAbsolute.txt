@@ -1,0 +1,17 @@
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\MVCTask.Core.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\MVCTask.Core.pdb
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\obj\Debug\MVCTask.Core.csprojResolveAssemblyReference.cache
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\obj\Debug\MVCTask.Core.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\obj\Debug\MVCTask.Core.pdb
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\MVCTask.Core.dll.config
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\Castle.Core.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\Castle.Windsor.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\EntityFramework.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\EntityFramework.SqlServer.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\MVCTask.Data.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\MVCTask.Data.pdb
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\MVCTask.Data.dll.config
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\Castle.Core.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\Castle.Windsor.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\EntityFramework.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Core\bin\Debug\EntityFramework.SqlServer.xml
