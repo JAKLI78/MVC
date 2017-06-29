@@ -10,9 +10,9 @@ namespace MVCTask.Data.Model
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Email { get; set; }
-        public int? TitleId { get; set; }
+        public string Email { get; set; }        
         public int? CompanyId { get; set; }
         public DateTime BirthDate { get; set; }
+        public string FileUrl { get; set; }
     }
 }

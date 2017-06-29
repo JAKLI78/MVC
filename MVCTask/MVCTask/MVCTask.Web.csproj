@@ -167,6 +167,7 @@
     </Compile>
     <Compile Include="Installers\ControllerInastaller.cs" />
     <Compile Include="Installers\CoreInstaller.cs" />
+    <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UsersViewModel.cs" />
     <Compile Include="Plumbing\WindsorControllerFactory.cs" />

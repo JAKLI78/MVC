@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MVCTask.Core.Interface;
 using MVCTask.Data.Interface;
 using MVCTask.Data.Model;
@@ -32,6 +33,66 @@ namespace MVCTask.Core.Class
         public IEnumerable<string> GetTitelsForUserById(int userId)
         {
             return _titleRepository.GetNamesByUserId(userId);
+        }
+
+        public IEnumerable<Company> GetCompanies()
+        {
+            return _companyRepository.Get();
+        }
+
+        public void CreateUser(string Name, string Surname, string Email, string titels, DateTime birthDate, int companyId, string fileUrl)
+        {
+            var user = new User
+            {                   
+                Email = Email,
+                BirthDate = birthDate,
+                CompanyId = companyId,
+                FileUrl = fileUrl,
+                Name = Name,
+                Surname = Surname
+            };
+            
+            _userRepository.Create(user);
+
+            if (titels.Length>0)
+            {
+                var titless = titels.Split('/');
+                foreach (var s in titless)
+                {
+                    if (s.Length>0)
+                    {
+                        var userId = _userRepository.Get().First(u => u.Email == Email).Id;
+                        _titleRepository.Create(new Title() { Name = s, UserId = userId });
+                    }
+                    
+                }
+            }
+        }
+
+        public void UpdateUser(int userId, string Name, string Surname, string Email, string titels, DateTime birthDate, int companyId,
+            string fileUrl)
+        {
+            var user = new User
+            {
+                Id = userId,
+                Email = Email,
+                BirthDate = birthDate,
+                CompanyId = companyId,
+                FileUrl = fileUrl,
+                Name = Name,
+                Surname = Surname
+            };
+
+            _userRepository.Update(user);
+        }
+
+        public void DeleteUser(int userId)
+        {
+            foreach (var title in _titleRepository.Get(t=>t.UserId==userId))
+            {
+                _titleRepository.Remove(title);
+            }
+            _userRepository.Remove(_userRepository.FindById(userId));
         }
     }
 }

@@ -28,6 +28,7 @@ namespace MVCTask
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
             _container.Install(FromAssembly.This());
             _container.Install(FromAssembly.Named("MVCTask.Core"));
+            
 
         }
 

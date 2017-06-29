@@ -13,13 +13,14 @@ namespace MVCTask.Controllers
     {
         private ITestServise _servise;
 
-        public UsersController(ITestServise servise)
+        public UsersController(ITestServise servise,IActionInvoker actionInvoker)
         {
-            if (servise == null)
+            if (servise == null || actionInvoker ==null)
             {
                 throw new ArgumentNullException("servise");
             }
             _servise = servise;
+            ActionInvoker = actionInvoker;
         }
         // GET: Users
         public ActionResult Index()
@@ -57,20 +58,15 @@ namespace MVCTask.Controllers
             return View("Index", users);
         }
 
-        public ActionResult NewUser()
-        {
-            return View();
-        }
-
-        public ActionResult EditUser()
-        {
-            return View();
-        }
-
         public ActionResult DeleteUser()
         {
-            //TODO: deleteing user
-            return View("Index");
+            var userId = 0;
+            foreach (var valuesKey in RouteData.Values.Keys)
+            {
+                if (valuesKey.Equals("id")) userId = int.Parse(RouteData.Values[valuesKey].ToString());
+            }
+            _servise.DeleteUser(userId);
+            return RedirectToAction("Index");
         }
     }
 }

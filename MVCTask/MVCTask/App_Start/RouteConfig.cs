@@ -18,6 +18,11 @@ namespace MVCTask
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Users", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "NewUser",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "NewUser", action = "NewUser", id = UrlParameter.Optional }
+            );
         }
     }
 }

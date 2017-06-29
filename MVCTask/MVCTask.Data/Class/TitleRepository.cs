@@ -17,14 +17,11 @@ namespace MVCTask.Data.Class
         {
             try
             {
-                
-                
                 return Get(t => t.UserId == userId).Select(title => title.Name).ToList();
-
             }
             catch (Exception e)
             {
-                return new List<string>();
+                return new List<string>(){""};
                 
             }
         }

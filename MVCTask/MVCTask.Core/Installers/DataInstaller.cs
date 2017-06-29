@@ -12,7 +12,7 @@ namespace MVCTask.Core.Installers
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Component.For<DbContext>().ImplementedBy<DataContext>().LifestylePerWebRequest());
+            container.Register(Component.For<System.Data.Entity.DbContext>().ImplementedBy<DataContext>().LifestylePerWebRequest());
             container.Register(Component.For<ICompanyRepository>().ImplementedBy<CompanyRepository>()
                 .LifestylePerWebRequest());
             container.Register(
