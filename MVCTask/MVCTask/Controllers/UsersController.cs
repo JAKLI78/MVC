@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MVCTask.Core.Interface;
 using MVCTask.Models;
-using MVCTask.Data;
 
 namespace MVCTask.Controllers
 {
     public class UsersController : BaseController
     {
-        private ITestServise _servise;
+        private readonly ITestServise _servise;
 
-        public UsersController(ITestServise servise,IActionInvoker actionInvoker)
+        public UsersController(ITestServise servise)
         {
-            if (servise == null || actionInvoker ==null)
-            {
-                throw new ArgumentNullException("servise");
-            }
+            if (servise == null)
+                throw new ArgumentNullException(nameof(servise), $"{nameof(servise)} cannot be null.");
             _servise = servise;
-            ActionInvoker = actionInvoker;
         }
+
         // GET: Users
         public ActionResult Index()
         {
@@ -31,12 +27,19 @@ namespace MVCTask.Controllers
                 var companyName = _servise.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
                 var titels = _servise.GetTitelsForUserById(user.Id);
                 var strTitels = "";
-                if (titels.Count()>0)
+                if (titels.Any())
+                    strTitels = $"( {titels.Aggregate((current, str) => current + ", " + str)} )";
+
+                users.Add(new UserModel
                 {
-                    strTitels = string.Format("( {0} )", titels.Aggregate((current, str) => current + ", " + str));
-                }
-                
-                users.Add(new UserModel(){Id = user.Id,BirthDate = user.BirthDate,CompanyName = companyName,Email = user.Email,Name = user.Name,Surname = user.Surname,Title = strTitels});
+                    Id = user.Id,
+                    BirthDate = user.BirthDate,
+                    CompanyName = companyName,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    TitlesForView = strTitels
+                });
             }
             return View(users);
         }
@@ -49,11 +52,18 @@ namespace MVCTask.Controllers
                 var companyName = _servise.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
                 var titels = _servise.GetTitelsForUserById(user.Id);
                 var strTitels = "";
-                if (titels.Count() > 0)
+                if (titels.Any())
+                    strTitels = $"( {titels.Aggregate((current, str) => current + ", " + str)} )";
+                users.Add(new UserModel
                 {
-                    strTitels = string.Format("( {0} )", titels.Aggregate((current, str) => current + ", " + str));
-                }
-                users.Add(new UserModel() { Id = user.Id, BirthDate = user.BirthDate, CompanyName = companyName, Email = user.Email, Name = user.Name, Surname = user.Surname, Title = strTitels });
+                    Id = user.Id,
+                    BirthDate = user.BirthDate,
+                    CompanyName = companyName,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    TitlesForView = strTitels
+                });
             }
             return View("Index", users);
         }
@@ -62,9 +72,7 @@ namespace MVCTask.Controllers
         {
             var userId = 0;
             foreach (var valuesKey in RouteData.Values.Keys)
-            {
                 if (valuesKey.Equals("id")) userId = int.Parse(RouteData.Values[valuesKey].ToString());
-            }
             _servise.DeleteUser(userId);
             return RedirectToAction("Index");
         }

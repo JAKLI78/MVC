@@ -2,7 +2,7 @@
 
 namespace MVCTask.Data.Interface
 {
-    public interface ICompanyRepository:IRepository<Company>
+    public interface ICompanyRepository : IRepository<Company>
     {
         string GetNameById(int companyId);
     }

@@ -40,17 +40,15 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class\BaseRepository.cs" />
-    <Compile Include="Class\CompanyRepository.cs" />
-    <Compile Include="Class\TitleRepository.cs" />
-    <Compile Include="Class\UserRepository.cs" />
+    <Compile Include="Repositores\BaseRepository.cs" />
+    <Compile Include="Repositores\CompanyRepository.cs" />
+    <Compile Include="Repositores\TitleRepository.cs" />
+    <Compile Include="Repositores\UserRepository.cs" />
     <Compile Include="Interface\ICompanyRepository.cs" />
     <Compile Include="Interface\IRepository.cs" />
     <Compile Include="Interface\ITitleRepository.cs" />

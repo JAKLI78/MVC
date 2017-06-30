@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MVCTask.Data.Interface
 {
-    public interface IRepository<TEntity> where TEntity: class 
+    public interface IRepository<TEntity> where TEntity : class
     {
         void Create(TEntity item);
         TEntity FindById(int id);
