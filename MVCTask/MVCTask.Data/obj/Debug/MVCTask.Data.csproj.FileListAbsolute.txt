@@ -1,0 +1,10 @@
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\MVCTask.Data.dll.config
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\MVCTask.Data.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\MVCTask.Data.pdb
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\EntityFramework.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\EntityFramework.SqlServer.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\EntityFramework.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\bin\Debug\EntityFramework.SqlServer.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\obj\Debug\MVCTask.Data.csprojResolveAssemblyReference.cache
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\obj\Debug\MVCTask.Data.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask.Data\obj\Debug\MVCTask.Data.pdb
