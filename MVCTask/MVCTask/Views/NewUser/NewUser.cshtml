@@ -19,8 +19,9 @@
 <script language="javascript">
     function SomeClick() {
         var count = $('.title_box').length;
-        $('#SomeTitle').append('<li> Title: <input type="text" name="Title' + count + '" class="title_box"/> </li>');
-        $('#count').value = count;
+        $('#SomeTitle').append('<li> Title: <input type="text" name="Title[' +
+            count +
+            ']" class="title_box" value=""/> </li>');
     };
 </script>
 <html>
@@ -44,15 +45,15 @@
             <div>
                 <ul id="SomeTitle">
                     <li>
-                        Title: <input type="text" name="Title" class="title_box" value="@Model.Titles.First()"/> <input type="button" value="Add" id="SomeAdd" onclick="SomeClick();"/>
+                        Title: <input type="text" name="Title[0]" class="title_box" value="@Model.Title.First()"/> <input type="button" value="Add" id="SomeAdd" onclick="SomeClick();"/>
 
                     </li>
                     @{
-                        if (Model.CountOfTitles > 1)
+                        if (Model.Title.Count > 1)
                         {
-                            for (var i = 1; i < Model.CountOfTitles; i++)
+                            for (var i = 1; i < Model.Title.Count; i++)
                             {
-                                <li> Title: <input type="text" name="Title@i" class="title_box" value="@Model.Titles.ElementAt(i)"/> </li>
+                                <li> Title: <input type="text" name="Title[@i]" class="title_box" value="@Model.Title.ElementAt(i)"/> </li>
                             }
                         }
                     }

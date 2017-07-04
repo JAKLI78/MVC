@@ -19,7 +19,7 @@ namespace MVCTask.Models
         [Required(ErrorMessage = "Enter Email")]
         public string Email { get; set; }
 
-        public string[] Title { get; set; }
+        public ICollection<string> Title { get; set; }
 
         public string TitlesForView { get; set; }
 

@@ -39,8 +39,7 @@ namespace MVCTask.Core.Services
             _userRepository.Create(user);
         }
 
-        public void UpdateUser(int userId, string name, string surname, string email, string titels, DateTime birthDate,
-            int companyId,
+        public void UpdateUser(int userId, string name, string surname, string email, DateTime birthDate, int companyId,
             string fileUrl)
         {
             var user = new User

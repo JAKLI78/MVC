@@ -12,7 +12,7 @@ namespace MVCTask.Core.Interface
         void CreateUser(string name, string surname, string email, string titels, DateTime birthDate, int companyId,
             string fileUrl);
 
-        void UpdateUser(int userId, string name, string surname, string email, string titels, DateTime birthDate,
+        void UpdateUser(int userId, string name, string surname, string email, DateTime birthDate,
             int companyId,
             string fileUrl);
 

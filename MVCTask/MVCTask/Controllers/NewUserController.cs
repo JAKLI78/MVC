@@ -37,13 +37,17 @@ namespace MVCTask.Controllers
                 Surname = "",
                 Name = "",
                 Email = "",
-                Titles = new List<string> {""}
+                Title = new List<string> {""}
             };
             ViewBag.Title = "New user";
             if (id > 0)
             {
                 var userToEdit = _userService.GetUsers().First(u => u.Id == id.Value);
                 var userTitels = _titelsServise.GetTitelsForUserById(id.Value);
+                if (!userTitels.Any())
+
+                    userTitels = new List<string> {""};
+
                 ViewBag.Title = "Edit user";
                 model = new UserModel
                 {
@@ -53,14 +57,14 @@ namespace MVCTask.Controllers
                     Name = userToEdit.Name,
                     Surname = userToEdit.Surname,
                     CompanyId = userToEdit.CompanyId.GetValueOrDefault(),
-                    Titles = userTitels,
-                    CountOfTitles = userTitels.Count()
+                    Title = (ICollection<string>) userTitels
                 };
             }
             model.CompanyModels = BuildCompanyModelsForView();
 
             return View("NewUser", model);
         }
+
 
         [HttpPost]
         public ActionResult CreateUser(HttpPostedFileBase file, UserModel model, FormCollection formCollection)
@@ -70,10 +74,7 @@ namespace MVCTask.Controllers
                 var titles = "";
                 var companyId = formCollection["Company"];
                 var someDate = formCollection["BirthDate"];
-                foreach (string formCollectionKey in formCollection.Keys)
-                    if (formCollectionKey.Contains("Title"))
-                        if (formCollection[formCollectionKey].Length > 0)
-                            titles += formCollection[formCollectionKey] + "/";
+
                 if (someDate.Length > 0)
                     model.BirthDate = DateTime.Parse(someDate);
 
@@ -84,13 +85,21 @@ namespace MVCTask.Controllers
                     path = Server.MapPath("/Content/Uploads/Files/" + fil);
                     file.SaveAs(path);
                 }
-                if (model.Id > 0)
-                    _userService.UpdateUser(model.Id, model.Name, model.Surname, model.Email, titles,
+                if (model.Id > 0) //TODO:ОБНОВЛЕНИЕ ДОЛЖНОСТЕЙ
+                {
+                    _userService.UpdateUser(model.Id, model.Name, model.Surname, model.Email,
                         model.BirthDate.Value,
                         int.Parse(companyId), path);
+                }
                 else
+                {
                     _userService.CreateUser(model.Name, model.Surname, model.Email, titles, model.BirthDate.Value,
                         int.Parse(companyId), path);
+                    var uId = _userService.GetUsers().First(u => u.Email == model.Email).Id;
+                    foreach (var s in model.Title)
+                        _titelsServise.CreateTitle(s, uId);
+                }
+
 
                 return RedirectToAction("Index", "Users");
             }
