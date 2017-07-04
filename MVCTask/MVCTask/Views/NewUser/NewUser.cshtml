@@ -52,13 +52,13 @@
                         {
                             for (var i = 1; i < Model.CountOfTitles; i++)
                             {
-                                <li> Title: <input type="text" name="Title+@i" class="title_box" value="@Model.Titles.ElementAt(i)"/> </li>
+                                <li> Title: <input type="text" name="Title@i" class="title_box" value="@Model.Titles.ElementAt(i)"/> </li>
                             }
                         }
                     }
                 </ul>
             </div>
-            <div>BirthDate: @Html.EditorFor(m => m.BirthDate, new {@class = "date-picker"}) @Html.ValidationMessageFor(m => m.BirthDate, "", new {@class = "text-danger"})</div>
+            <div >BirthDate: @Html.EditorFor(m => m.BirthDate, new {htmlAttributes = new {@class = "date-picker"}}) @Html.ValidationMessageFor(m => m.BirthDate, "", new {@class = "text-danger"})</div>
             <div>
 
             </div>

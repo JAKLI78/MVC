@@ -23,6 +23,8 @@ namespace MVCTask.Models
 
         public string TitlesForView { get; set; }
 
+        public string StrImage { get; set; }
+
         [HiddenInput(DisplayValue = false)]
         public int CompanyId { get; set; }
 

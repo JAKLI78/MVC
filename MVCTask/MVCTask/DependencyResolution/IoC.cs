@@ -17,7 +17,7 @@
 
 
 using MVCTask.Core.Registers;
-using MVCTask.Installers;
+using MVCTask.Registers;
 using StructureMap.Configuration.DSL;
 
 namespace MVCTask.DependencyResolution {

@@ -9,37 +9,52 @@ namespace MVCTask.Controllers
 {
     public class UsersController : BaseController
     {
-        private readonly ITestServise _servise;
+        private readonly ICompanyService _companyService;
+        private readonly IImageService _imageService;
+        private readonly ITitelsServise _titelsServise;
+        private readonly IUserService _userService;
 
-        public UsersController(ITestServise servise)
+        public UsersController(ITitelsServise titelsServise, IImageService imageService, IUserService userService,
+            ICompanyService companyService)
         {
-            if (servise == null)
-                throw new ArgumentNullException(nameof(servise), $"{nameof(servise)} cannot be null.");
-            _servise = servise;
+            if (titelsServise == null)
+                throw new ArgumentNullException(nameof(titelsServise), $"{nameof(titelsServise)} cannot be null.");
+
+            if (userService == null)
+                throw new ArgumentNullException(nameof(userService), $"{nameof(userService)} cannot be null.");
+            if (companyService == null)
+                throw new ArgumentNullException(nameof(companyService), $"{nameof(companyService)} cannot be null.");
+
+            _companyService = companyService;
+            _userService = userService;
+            _titelsServise = titelsServise;
+            _imageService = imageService;
         }
 
         // GET: Users
         public ActionResult Index()
         {
             var users = new List<UserModel>();
-            foreach (var user in _servise.GetUsers())
+
+            foreach (var user in _userService.GetUsers())
             {
-                var companyName = _servise.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
-                var titels = _servise.GetTitelsForUserById(user.Id);
+                var companyName = _companyService.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
+                var titels = _titelsServise.GetTitelsForUserById(user.Id);
                 var strTitels = "";
                 if (titels.Any())
                     strTitels = $"( {titels.Aggregate((current, str) => current + ", " + str)} )";
+                if (user.FileUrl.Length > 0)
 
-                users.Add(new UserModel
-                {
-                    Id = user.Id,
-                    BirthDate = user.BirthDate,
-                    CompanyName = companyName,
-                    Email = user.Email,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    TitlesForView = strTitels
-                });
+                    users.Add(new UserModel
+                    {
+                        Id = user.Id,
+                        BirthDate = user.BirthDate,
+                        CompanyName = companyName,
+                        Email = user.Email,
+                        Name = user.Name,
+                        Surname = user.Surname,
+                        TitlesForView = strTitels
+                    });
             }
             return View(users);
         }
@@ -47,10 +62,10 @@ namespace MVCTask.Controllers
         public ActionResult Find(FormCollection formCollection)
         {
             var users = new List<UserModel>();
-            foreach (var user in _servise.GetUsers())
+            foreach (var user in _userService.GetUsers())
             {
-                var companyName = _servise.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
-                var titels = _servise.GetTitelsForUserById(user.Id);
+                var companyName = _companyService.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
+                var titels = _titelsServise.GetTitelsForUserById(user.Id);
                 var strTitels = "";
                 if (titels.Any())
                     strTitels = $"( {titels.Aggregate((current, str) => current + ", " + str)} )";
@@ -73,7 +88,7 @@ namespace MVCTask.Controllers
             var userId = 0;
             foreach (var valuesKey in RouteData.Values.Keys)
                 if (valuesKey.Equals("id")) userId = int.Parse(RouteData.Values[valuesKey].ToString());
-            _servise.DeleteUser(userId);
+            _userService.DeleteUser(userId);
             return RedirectToAction("Index");
         }
     }

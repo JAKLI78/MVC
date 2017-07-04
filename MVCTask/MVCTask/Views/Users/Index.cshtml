@@ -8,6 +8,8 @@
 
 <html>
 <head>
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
     <title>Users</title>
 </head>
 <body>
@@ -32,7 +34,7 @@
             {
                 <tr>
                     <td>
-                        @item.Name @item.Surname @item.TitlesForView
+                        @item.Name @item.Surname @item.TitlesForView <img class="img" id="@item.Id" src="@Url.Action("RenderImage", "AsyncImage", new {item.Id})"/>
 
                     </td>
                     <td>@Html.DisplayFor(m => m.Find(i => i.Id == item.Id).BirthDate)</td>

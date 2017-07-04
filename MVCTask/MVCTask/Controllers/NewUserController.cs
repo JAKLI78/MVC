@@ -12,13 +12,21 @@ namespace MVCTask.Controllers
 {
     public class NewUserController : BaseController
     {
-        private readonly ITestServise _servise;
+        private readonly ICompanyService _companyService;
+        private readonly ITitelsServise _titelsServise;
+        private readonly IUserService _userService;
 
-        public NewUserController(ITestServise servise)
+        public NewUserController(IUserService userService, ITitelsServise titelsServise, ICompanyService companyService)
         {
-            if (servise == null)
-                throw new ArgumentNullException(nameof(servise), $"{nameof(servise)} cannot be null.");
-            _servise = servise;
+            if (userService == null)
+                throw new ArgumentNullException(nameof(userService), $"{nameof(userService)} cannot be null.");
+            if (titelsServise == null)
+                throw new ArgumentNullException(nameof(titelsServise), $"{nameof(titelsServise)} cannot be null");
+            if (companyService == null)
+                throw new ArgumentNullException(nameof(companyService), $"{nameof(companyService)} cannot be null.");
+            _userService = userService;
+            _titelsServise = titelsServise;
+            _companyService = companyService;
         }
 
         // GET: NewUser
@@ -34,8 +42,8 @@ namespace MVCTask.Controllers
             ViewBag.Title = "New user";
             if (id > 0)
             {
-                var userToEdit = _servise.GetUsers().First(u => u.Id == id.Value);
-                var userTitels = _servise.GetTitelsForUserById(id.Value);
+                var userToEdit = _userService.GetUsers().First(u => u.Id == id.Value);
+                var userTitels = _titelsServise.GetTitelsForUserById(id.Value);
                 ViewBag.Title = "Edit user";
                 model = new UserModel
                 {
@@ -77,10 +85,11 @@ namespace MVCTask.Controllers
                     file.SaveAs(path);
                 }
                 if (model.Id > 0)
-                    _servise.UpdateUser(model.Id, model.Name, model.Surname, model.Email, titles, model.BirthDate.Value,
+                    _userService.UpdateUser(model.Id, model.Name, model.Surname, model.Email, titles,
+                        model.BirthDate.Value,
                         int.Parse(companyId), path);
                 else
-                    _servise.CreateUser(model.Name, model.Surname, model.Email, titles, model.BirthDate.Value,
+                    _userService.CreateUser(model.Name, model.Surname, model.Email, titles, model.BirthDate.Value,
                         int.Parse(companyId), path);
 
                 return RedirectToAction("Index", "Users");
@@ -101,7 +110,7 @@ namespace MVCTask.Controllers
             {
                 new CompanyModel {CompanyName = "", Id = 0}
             };
-            compModels.AddRange(_servise.GetCompanies()
+            compModels.AddRange(_companyService.GetCompanies()
                 .Select(company => new CompanyModel {CompanyName = company.Name, Id = company.Id}));
 
             return compModels;
