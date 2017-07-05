@@ -23,8 +23,7 @@ namespace MVCTask.Core.Services
             return _userRepository.Get();
         }
 
-        public void CreateUser(string name, string surname, string email, string titels, DateTime birthDate,
-            int companyId,
+        public void CreateUser(string name, string surname, string email, DateTime birthDate, int companyId,
             string fileUrl)
         {
             var user = new User

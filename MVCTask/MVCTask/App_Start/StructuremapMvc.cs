@@ -30,8 +30,12 @@ namespace MVCTask.App_Start {
 	using MVCTask.DependencyResolution;
 
     using StructureMap;
-    
-	public static class StructuremapMvc {
+
+	using FluentValidation.Mvc;
+
+    using MVCTask.Validator;
+
+    public static class StructuremapMvc {
         #region Public Properties
 
         public static StructureMapDependencyScope StructureMapDependencyScope { get; set; }
@@ -48,7 +52,9 @@ namespace MVCTask.App_Start {
             IContainer container = IoC.Initialize();
             StructureMapDependencyScope = new StructureMapDependencyScope(container);
             DependencyResolver.SetResolver(StructureMapDependencyScope);
-            DynamicModuleUtility.RegisterModule(typeof(StructureMapScopeModule));            
+            DynamicModuleUtility.RegisterModule(typeof(StructureMapScopeModule));
+            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new ValidatorFactory(container)));
+            DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
         }
 
         #endregion

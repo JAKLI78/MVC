@@ -12,6 +12,7 @@ namespace MVCTask.Registers
             For<IImageService>().Use<ImageService>();
             For<ICompanyService>().Use<CompanyService>();
             For<IUserService>().Use<UserService>();
+            For<ISearchService>().Use<SearchService>();
         }
     }
 }

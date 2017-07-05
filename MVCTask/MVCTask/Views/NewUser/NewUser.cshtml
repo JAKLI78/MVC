@@ -19,9 +19,16 @@
 <script language="javascript">
     function SomeClick() {
         var count = $('.title_box').length;
-        $('#SomeTitle').append('<li> Title: <input type="text" name="Title[' +
+        $('#SomeTitle').append('<li class="title_box"> Title: <input type="text" name="Title[' +
             count +
-            ']" class="title_box" value=""/> </li>');
+            ']"  value=""/> <input type="button" value="Remove" id="SomeRemove" onclick="RemoveTitelInput(' +
+            count +
+            ');"/>  </li>');
+    };
+
+    function RemoveTitelInput(some) {
+        console.log(some);
+        $('.title_box:eq(' + some + ')').remove();
     };
 </script>
 <html>
@@ -39,13 +46,14 @@
         @using (Html.BeginForm("CreateUser", "NewUser", FormMethod.Post, new {enctype = "multipart/form-data"}))
         {
             <div>@Html.EditorFor(m => m.Id)</div>
+            <div>@Html.EditorFor(m => m.StrImage)</div>
             <div>Email: @Html.EditorFor(m => m.Email) @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})</div>
             <div>Name:@Html.EditorFor(m => m.Name) @Html.ValidationMessageFor(m => m.Name, "", new {@class = "text-danger"})</div>
             <div>Surname:@Html.EditorFor(m => m.Surname) @Html.ValidationMessageFor(m => m.Surname, "", new {@class = "text-danger"})</div>
             <div>
                 <ul id="SomeTitle">
-                    <li>
-                        Title: <input type="text" name="Title[0]" class="title_box" value="@Model.Title.First()"/> <input type="button" value="Add" id="SomeAdd" onclick="SomeClick();"/>
+                    <li class="title_box">
+                        Title: <input type="text" name="Title[0]" value="@Model.Title.First()"/> <input type="button" value="Add" id="SomeAdd" onclick="SomeClick();"/>
 
                     </li>
                     @{
@@ -53,7 +61,7 @@
                         {
                             for (var i = 1; i < Model.Title.Count; i++)
                             {
-                                <li> Title: <input type="text" name="Title[@i]" class="title_box" value="@Model.Title.ElementAt(i)"/> </li>
+                                <li class="title_box"> Title: <input type="text" name="Title[@i]" value="@Model.Title.ElementAt(i)"/> <input type="button" value="Remove" id="SomeAdd" onclick="RemoveTitelInput(@i);"/> </li>
                             }
                         }
                     }
@@ -63,7 +71,7 @@
             <div>
 
             </div>
-            <div>Company: @Html.DropDownList("Company", new SelectList(Model.CompanyModels, "Id", "CompanyName", Model.CompanyId)) </div>
+            <div>Company: @Html.DropDownList("CompanyId", new SelectList(Model.CompanyModels, "Id", "CompanyName", Model.CompanyId)) @Html.ValidationMessageFor(m => m.CompanyId, "", new {@class = "text-danger"})</div>
             <div>
                 <input type="file" name="file" id="file"/>
             </div>

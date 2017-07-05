@@ -1,4 +1,4 @@
-﻿@model List<MVCTask.Models.UserModel>
+﻿@model MVCTask.Models.UsersViewModel
 
 @{
     Layout = null;
@@ -9,20 +9,30 @@
 <html>
 <head>
     <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        function DeleteOrNot() {
 
+        }
+    </script>
     <title>Users</title>
 </head>
 <body>
 <div>
-    <ul>
-        <li>Users</li>
-        <li>@Html.TextBox("serchBox")</li>
-        <li>@Html.ActionLink("Find", "Find")</li>
-        <li>
-            <a href="@Url.Action("NewUser", "NewUser")">New user</a>
-        </li>
-    </ul>
-    @if (Model.Count > 0)
+    @using (Html.BeginForm("Find", "Users"))
+    {
+        <ul>
+            <li>Users</li>
+            <li>@Html.EditorFor(m => m.Search)</li>
+            <li>
+                <input type="submit" value="Find"/>
+            </li>
+            <li>
+                <a href="@Url.Action("NewUser", "NewUser")">New user</a>
+            </li>
+        </ul>
+    }
+
+    @if (Model.UserModels.Count > 0)
     {
         <table>
             <thead>
@@ -30,20 +40,20 @@
                 <th>Name</th><th>Birth Date</th><th>Company</th><th>Actions</th>
             </tr>
             </thead>
-            @foreach (var item in Model)
+            @foreach (var item in Model.UserModels)
             {
                 <tr>
                     <td>
                         @item.Name @item.Surname @item.TitlesForView <img class="img" id="@item.Id" src="@Url.Action("RenderImage", "AsyncImage", new {item.Id})"/>
 
                     </td>
-                    <td>@Html.DisplayFor(m => m.Find(i => i.Id == item.Id).BirthDate)</td>
+                    <td>@Html.DisplayFor(m => m.UserModels.Find(i => i.Id == item.Id).BirthDate)</td>
                     <td>@item.CompanyName</td>
                     @{
                         var dic = new Dictionary<string, object>();
                         dic.Add("id", item.Id);
                         <td>
-                            <a href="@Url.Action("NewUser", "NewUser", new RouteValueDictionary(dic))">edit</a> <a href="@Url.Action("DeleteUser", "Users", new RouteValueDictionary(dic))">delete</a>
+                            <a href="@Url.Action("NewUser", "NewUser", new RouteValueDictionary(dic))">edit</a> <a onclick="return confirm('Вы точно хотите удалиь этого пользователя?')" href="@Url.Action("DeleteUser", "Users", new RouteValueDictionary(dic))">delete</a>
                         </td>
                     }
 

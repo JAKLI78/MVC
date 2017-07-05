@@ -158,6 +158,12 @@
             </returns>
             <filterpriority>1</filterpriority>
         </member>
+        <member name="M:FluentValidation.AbstractValidator`1.EnsureInstanceNotNull(System.Object)">
+            <summary>
+            Throws an exception if the instance being validated is null.
+            </summary>
+            <param name="instanceToValidate"></param>
+        </member>
         <member name="T:FluentValidation.DependentRules`1">
             <summary>
             Container class for dependent rule definitions
@@ -177,6 +183,11 @@
         <member name="M:FluentValidation.AssemblyScanner.FindValidatorsInAssembly(System.Reflection.Assembly)">
             <summary>
             Finds all the validators in the specified assembly.
+            </summary>
+        </member>
+        <member name="M:FluentValidation.AssemblyScanner.FindValidatorsInAssemblies(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
+            <summary>
+            Finds all the validators in the specified assemblies
             </summary>
         </member>
         <member name="M:FluentValidation.AssemblyScanner.FindValidatorsInAssemblyContaining``1">
@@ -450,6 +461,11 @@
             The type of the resource provider if localized.
             </summary>
         </member>
+        <member name="T:FluentValidation.Resources.IContextAwareStringSource">
+            <summary>
+            Marker interface that indicates a PropertyValidatorContext should be passed to GetString
+            </summary>
+        </member>
         <member name="T:FluentValidation.Resources.Language">
             <summary>
             Base class for lanaguages
@@ -548,6 +564,27 @@
             </summary>
         </member>
         <member name="P:FluentValidation.Resources.LazyStringSource.ResourceType">
+            <summary>
+            Resource name
+            </summary>
+        </member>
+        <member name="M:FluentValidation.Resources.ContextAwareLazyStringSource.#ctor(System.Func{FluentValidation.Validators.PropertyValidatorContext,System.String})">
+            <summary>
+            Creates a LazyStringSource
+            </summary>
+        </member>
+        <member name="M:FluentValidation.Resources.ContextAwareLazyStringSource.GetString(System.Object)">
+            <summary>
+            Gets the value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:FluentValidation.Resources.ContextAwareLazyStringSource.ResourceName">
+            <summary>
+            Resource type
+            </summary>
+        </member>
+        <member name="P:FluentValidation.Resources.ContextAwareLazyStringSource.ResourceType">
             <summary>
             Resource name
             </summary>
@@ -1570,6 +1607,16 @@
             <returns></returns>
         </member>
         <member name="M:FluentValidation.DefaultValidatorOptions.WithState``2(FluentValidation.IRuleBuilderOptions{``0,``1},System.Func{``0,System.Object})">
+            <summary>
+            Specifies custom state that should be stored alongside the validation message when validation fails for this rule.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TProperty"></typeparam>
+            <param name="rule"></param>
+            <param name="stateProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FluentValidation.DefaultValidatorOptions.WithState``2(FluentValidation.IRuleBuilderOptions{``0,``1},System.Func{``0,``1,System.Object})">
             <summary>
             Specifies custom state that should be stored alongside the validation message when validation fails for this rule.
             </summary>
@@ -3046,6 +3093,54 @@
             <summary>
             Ensures that the property value is a valid credit card number.
             </summary>
+        </member>
+        <member name="T:FluentValidation.Validators.CustomValidator`1">
+            <summary>
+            Custom validator that allows for manual/direct creation of ValidationFailure instances. 
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:FluentValidation.Validators.CustomValidator`1.#ctor(System.Action{`0,FluentValidation.Validators.CustomContext})">
+            <summary>
+            Creates a new instance of the CustomValidator
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:FluentValidation.Validators.CustomValidator`1.#ctor(System.Func{`0,FluentValidation.Validators.CustomContext,System.Threading.CancellationToken,System.Threading.Tasks.Task})">
+            <summary>
+            Creates a new isntance of the CutomValidator.
+            </summary>
+            <param name="asyncAction"></param>
+        </member>
+        <member name="T:FluentValidation.Validators.CustomContext">
+            <summary>
+            Custom validation context
+            </summary>
+        </member>
+        <member name="M:FluentValidation.Validators.CustomContext.#ctor(FluentValidation.Validators.PropertyValidatorContext)">
+            <summary>
+            Creates a new CustomContext
+            </summary>
+            <param name="context">The parent PropertyValidatorContext that represents this execution</param>
+        </member>
+        <member name="M:FluentValidation.Validators.CustomContext.AddFailure(System.String,System.String)">
+            <summary>
+            Adds a new validation failure. 
+            </summary>
+            <param name="propertyName">The property name</param>
+            <param name="errorMessage">The error mesage</param>
+        </member>
+        <member name="M:FluentValidation.Validators.CustomContext.AddFailure(System.String)">
+            <summary>
+            Adds a new validation failure (the property name is inferred) 
+            </summary>
+            <param name="errorMessage">The error message</param>
+        </member>
+        <member name="M:FluentValidation.Validators.CustomContext.AddFailure(FluentValidation.Results.ValidationFailure)">
+            <summary>
+            Adss a new validation failure
+            </summary>
+            <param name="failure">The failure to add</param>
         </member>
         <member name="T:FluentValidation.Validators.IPropertyValidator">
             <summary>

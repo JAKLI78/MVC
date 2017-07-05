@@ -41,7 +41,8 @@ namespace MVCTask.Data.Repositores
 
         public void Remove(TEntity item)
         {
-            _dbSet.Remove(item);
+            //_dbSet.Remove(item);
+            _context.Entry(item).State = EntityState.Deleted;
             _context.SaveChanges();
         }
 

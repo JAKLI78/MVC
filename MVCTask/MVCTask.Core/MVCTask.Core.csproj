@@ -65,9 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\ICompanyService.cs" />
+    <Compile Include="Interface\ISearchService.cs" />
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Interface\IUserService.cs" />
     <Compile Include="Interface\IImageService.cs" />
+    <Compile Include="Services\SearchService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\TitleService.cs" />
