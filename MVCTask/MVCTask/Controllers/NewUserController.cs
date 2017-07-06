@@ -60,7 +60,7 @@ namespace MVCTask.Controllers
                     Email = userToEdit.Email,
                     Name = userToEdit.Name,
                     Surname = userToEdit.Surname,
-                    //CompanyId = userToEdit.CompanyId.,
+                    CompanyId = userToEdit.CompanyId.Value,
                     Title = (ICollection<string>) userTitels,
                     StrImage = userToEdit.FileUrl
                 };
@@ -73,8 +73,7 @@ namespace MVCTask.Controllers
 
         [HttpPost]
         public ActionResult CreateUser(HttpPostedFileBase file, UserModel model, FormCollection formCollection)
-        {
-            var result = _userValidator.ValidateUser(model);
+        {            
             if (ModelState.IsValid)
             {
                 var path = "";

@@ -37,16 +37,17 @@
         <table>
             <thead>
             <tr>
-                <th>Name</th><th>Birth Date</th><th>Company</th><th>Actions</th>
+                <th>Name</th> <th></th> <th>Birth Date</th><th>Company</th><th>Actions</th>
             </tr>
             </thead>
             @foreach (var item in Model.UserModels)
             {
                 <tr>
                     <td>
-                        @item.Name @item.Surname @item.TitlesForView <img class="img" id="@item.Id" src="@Url.Action("RenderImage", "AsyncImage", new {item.Id})"/>
+                        @item.Name @item.Surname @item.TitlesForView 
 
                     </td>
+                    <td><img class="img" id="@item.Id" src="@Url.Action("RenderImage", "AsyncImage", new {item.Id})" /></td>
                     <td>@Html.DisplayFor(m => m.UserModels.Find(i => i.Id == item.Id).BirthDate)</td>
                     <td>@item.CompanyName</td>
                     @{
