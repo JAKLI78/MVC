@@ -209,6 +209,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Filters\CreateEditFilter.cs" />
+    <Compile Include="Filters\DeleteFilter.cs" />
+    <Compile Include="Filters\IndexFilter.cs" />
+    <Compile Include="Filters\NewEditUserFilter.cs" />
+    <Compile Include="Filters\SearchFilter.cs" />
+    <Compile Include="Interface\ILogService.cs" />
     <Compile Include="Interface\IUserValidator.cs" />
     <Compile Include="Registers\CoreRegister.cs" />
     <Compile Include="Models\CompanyModel.cs" />
@@ -302,6 +308,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\NewUser\NewUser.cshtml" />
+    <Content Include="Views\Shared\Log.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

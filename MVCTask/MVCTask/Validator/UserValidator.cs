@@ -19,16 +19,14 @@ namespace MVCTask.Validator
 
             RuleFor(u => u.Name).NotEmpty().MaximumLength(50);
             RuleFor(u => u.Surname).NotEmpty().MaximumLength(50);
-            RuleFor(u => u.Email).NotEmpty().EmailAddress().Must((user,email) =>
+            RuleFor(u => u.Email).NotEmpty().EmailAddress().Must((user, email) =>
             {
                 var emails = _userRepository.Get().Select(u => u.Email).ToList();
-                if (user.Id>0 && _userRepository.FindById(user.Id).Email.Equals(email))
-                {
+                if (user.Id > 0 && _userRepository.FindById(user.Id).Email.Equals(email))
                     return true;
-                }
                 return !emails.Contains(email);
             }).WithMessage("This Email already in use.");
-            
+
             RuleFor(u => u.BirthDate).NotEmpty();
             RuleFor(u => u.CompanyId)
                 .Must((user, companyId) =>
@@ -36,12 +34,8 @@ namespace MVCTask.Validator
                     if (companyId == 0)
                         return true;
                     if (user.Id > 0)
-                    {
-                        if (user.CompanyId==companyId)
-                        {
+                        if (user.CompanyId == companyId)
                             return true;
-                        }
-                    }
                     return _userRepository.Get(u => u.CompanyId == companyId).Count() <
                            _companyRepository.FindById(companyId).MaxCounOfUsers;
                 })

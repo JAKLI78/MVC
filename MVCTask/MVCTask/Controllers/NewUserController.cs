@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Castle.Components.DictionaryAdapter;
 using MVCTask.Core.Interface;
+using MVCTask.Filters;
 using MVCTask.Interface;
 using MVCTask.Models;
 
@@ -35,9 +36,12 @@ namespace MVCTask.Controllers
             _userValidator = userValidator;
         }
 
+        [NewEditUserFilter]
         // GET: NewUser
         public ActionResult NewUser(int? id)
         {
+            if (HttpContext.Request.Cookies["log"] == null)
+                HttpContext.Request.Cookies.Add(new HttpCookie("log", ""));
             var model = new UserModel
             {
                 Surname = "",
@@ -70,10 +74,10 @@ namespace MVCTask.Controllers
             return View("NewUser", model);
         }
 
-
+        [CreateEditFilter]
         [HttpPost]
         public ActionResult CreateUser(HttpPostedFileBase file, UserModel model, FormCollection formCollection)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 var path = "";

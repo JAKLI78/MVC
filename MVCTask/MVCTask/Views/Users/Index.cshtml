@@ -14,6 +14,11 @@
 
         }
     </script>
+    <script type="text/C#">
+        @{
+            Html.ViewBag.Log = Html.ViewData["log"];
+        }
+    </script>
     <title>Users</title>
 </head>
 <body>
@@ -23,15 +28,17 @@
         <ul>
             <li>Users</li>
             <li>@Html.EditorFor(m => m.Search)</li>
+
             <li>
-                <input type="submit" value="Find"/>
+                <input type="submit" value="Find" onclick=""/>
             </li>
             <li>
                 <a href="@Url.Action("NewUser", "NewUser")">New user</a>
             </li>
         </ul>
     }
-
+    @{
+    }
     @if (Model.UserModels.Count > 0)
     {
         <table>
@@ -44,10 +51,12 @@
             {
                 <tr>
                     <td>
-                        @item.Name @item.Surname @item.TitlesForView 
+                        @item.Name @item.Surname @item.TitlesForView
 
                     </td>
-                    <td><img class="img" id="@item.Id" src="@Url.Action("RenderImage", "AsyncImage", new {item.Id})" /></td>
+                    <td>
+                        <img class="img" id="@item.Id" src="@Url.Action("RenderImage", "AsyncImage", new {item.Id})"/>
+                    </td>
                     <td>@Html.DisplayFor(m => m.UserModels.Find(i => i.Id == item.Id).BirthDate)</td>
                     <td>@item.CompanyName</td>
                     @{
@@ -63,5 +72,6 @@
         </table>
     }
 </div>
+@Html.Partial("Log");
 </body>
 </html>

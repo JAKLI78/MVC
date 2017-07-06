@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Castle.Core.Internal;
 using MVCTask.Core.Interface;
 using MVCTask.Data.Model;
+using MVCTask.Filters;
 using MVCTask.Models;
 
 namespace MVCTask.Controllers
@@ -35,12 +36,16 @@ namespace MVCTask.Controllers
             _titelsServise = titelsServise;
         }
 
+        [IndexFilter]
         // GET: Users
         public ActionResult Index()
         {
-            return View(GetModelWithAllUsers());
+            var model = GetModelWithAllUsers();
+
+            return View(model);
         }
 
+        [SearchFilter]
         [HttpPost]
         public ActionResult Find(UsersViewModel model)
         {
@@ -52,13 +57,14 @@ namespace MVCTask.Controllers
             else
             {
                 var usersFromSearch = _searchService.FindUsers(model.Search);
-                var users = usersFromSearch.Select(user => FillUser(user)).ToList();
+                var users = usersFromSearch.Select(FillUser).ToList();
                 returnModel.UserModels = users;
             }
 
             return View("Index", returnModel);
         }
 
+        [DeleteFilter]
         public ActionResult DeleteUser()
         {
             var userId = 0;
