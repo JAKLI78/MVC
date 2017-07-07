@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using MVCTask.Data.Interface;
@@ -7,7 +8,7 @@ using MVCTask.Models;
 
 namespace MVCTask.Validator
 {
-    public class UserValidator : AbstractValidator<UserModel>, IUserValidator
+    public class UserValidator : AbstractValidator<NewEditUserModel>, IUserValidator
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IUserRepository _userRepository;
@@ -42,8 +43,9 @@ namespace MVCTask.Validator
                 .WithMessage("Max count of users for this company");
         }
 
-        public ValidationResult ValidateUser(UserModel user)
+        public ValidationResult ValidateUser(NewEditUserModel user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return Validate(user);
         }
     }

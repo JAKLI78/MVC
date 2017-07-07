@@ -7,21 +7,19 @@ using System.Web.Mvc;
 using Castle.Components.DictionaryAdapter;
 using MVCTask.Core.Interface;
 using MVCTask.Filters;
-using MVCTask.Interface;
 using MVCTask.Models;
 
 namespace MVCTask.Controllers
 {
-    public class NewUserController : BaseController
+    [LogActionFilter]
+    public class NewEditUserController : BaseController
     {
         private readonly ICompanyService _companyService;
         private readonly ITitelsServise _titelsServise;
         private readonly IUserService _userService;
-        private readonly IUserValidator _userValidator;
 
-
-        public NewUserController(IUserService userService, ITitelsServise titelsServise, ICompanyService companyService,
-            IUserValidator userValidator)
+        public NewEditUserController(IUserService userService, ITitelsServise titelsServise,
+            ICompanyService companyService)
         {
             if (userService == null)
                 throw new ArgumentNullException(nameof(userService), $"{nameof(userService)} cannot be null.");
@@ -33,16 +31,13 @@ namespace MVCTask.Controllers
             _userService = userService;
             _titelsServise = titelsServise;
             _companyService = companyService;
-            _userValidator = userValidator;
         }
 
-        [NewEditUserFilter]
+        
         // GET: NewUser
         public ActionResult NewUser(int? id)
         {
-            if (HttpContext.Request.Cookies["log"] == null)
-                HttpContext.Request.Cookies.Add(new HttpCookie("log", ""));
-            var model = new UserModel
+            var model = new NewEditUserModel
             {
                 Surname = "",
                 Name = "",
@@ -52,31 +47,38 @@ namespace MVCTask.Controllers
             ViewBag.Title = "New user";
             if (id > 0)
             {
-                var userToEdit = _userService.GetUsers().First(u => u.Id == id.Value);
-                var userTitels = _titelsServise.GetTitelsForUserById(id.Value);
+                var userToEdit = _userService.FindUserById(id.Value);
+                var userTitels = _titelsServise.GetTitelsByUserId(id.Value);
                 if (!userTitels.Any())
                     userTitels = new List<string> {""};
                 ViewBag.Title = "Edit user";
-                model = new UserModel
+                model = new NewEditUserModel
                 {
                     Id = userToEdit.Id,
                     BirthDate = userToEdit.BirthDate,
                     Email = userToEdit.Email,
                     Name = userToEdit.Name,
                     Surname = userToEdit.Surname,
-                    CompanyId = userToEdit.CompanyId.Value,
+                    CompanyId = userToEdit.CompanyId.GetValueOrDefault(),
                     Title = (ICollection<string>) userTitels,
                     StrImage = userToEdit.FileUrl
                 };
             }
+            else
+            {
+                model.Surname = "";
+                model.Name = "";
+                model.Email = "";
+                model.Title = new List<string> {""};
+            }
             model.CompanyModels = BuildCompanyModelsForView();
 
-            return View("NewUser", model);
+            return View("NewEditUser", model);
         }
 
-        [CreateEditFilter]
+        
         [HttpPost]
-        public ActionResult CreateUser(HttpPostedFileBase file, UserModel model, FormCollection formCollection)
+        public ActionResult CreateUser(HttpPostedFileBase file, NewEditUserModel model, FormCollection formCollection)
         {
             if (ModelState.IsValid)
             {
@@ -94,9 +96,9 @@ namespace MVCTask.Controllers
                 if (model.Id > 0)
                 {
                     _userService.UpdateUser(model.Id, model.Name, model.Surname, model.Email,
-                        model.BirthDate.Value,
+                        model.BirthDate.GetValueOrDefault(),
                         model.CompanyId, path);
-                    var oldCountOfTitels = _titelsServise.GetTitelsForUserById(model.Id);
+                    var oldCountOfTitels = _titelsServise.GetTitelsByUserId(model.Id);
                     foreach (var oldCountOfTitel in oldCountOfTitels)
                         _titelsServise.RemoveTitle(model.Id, oldCountOfTitel);
                     foreach (var s in model.Title)
@@ -105,47 +107,40 @@ namespace MVCTask.Controllers
                 }
                 else
                 {
-                    _userService.CreateUser(model.Name, model.Surname, model.Email, model.BirthDate.Value,
+                    _userService.CreateUser(model.Name, model.Surname, model.Email, model.BirthDate.GetValueOrDefault(),
                         model.CompanyId, path);
                     var uId = _userService.GetUsers().First(u => u.Email == model.Email).Id;
                     foreach (var s in model.Title)
                         _titelsServise.CreateTitle(s, uId);
                 }
 
-
                 return RedirectToAction("Index", "Users");
             }
 
-            model.Titles = new List<string> {""};
+            model.Title = new List<string> {""};
             model.CompanyModels = BuildCompanyModelsForView();
             ViewBag.Title = "New user";
             if (model.Id > 0)
                 ViewBag.Title = "Edit user";
 
-            return View("NewUser", model);
+            return View("NewEditUser", model);
         }
 
         private List<CompanyModel> BuildCompanyModelsForView()
         {
-            List<CompanyModel> compModels = new EditableList<CompanyModel>
+            List<CompanyModel> companyModels = new EditableList<CompanyModel>
             {
-                new CompanyModel {CompanyName = "", Id = 0, MaxCountOfUsers = 999999999, CurrentCountOfUsers = 0}
+                new CompanyModel {CompanyName = "", Id = 0}
             };
-
-            foreach (var company in _companyService.GetCompanies())
+            var companies = _companyService.GetCompanies();
+            companyModels.AddRange(companies.Select(company => new CompanyModel
             {
-                var some = new CompanyModel
-                {
-                    CompanyName = company.Name,
-                    Id = company.Id,
-                    MaxCountOfUsers = company.MaxCounOfUsers,
-                    CurrentCountOfUsers = _userService.GetUsers().Count(u => u.CompanyId == company.Id)
-                };
-                some.ThisModel = some;
-                compModels.Add(some);
-            }
+                CompanyName = company.Name,
+                Id = company.Id,
+                MaxCountOfUsers = company.MaxCounOfUsers
+            }));
 
-            return compModels;
+            return companyModels;
         }
     }
 }

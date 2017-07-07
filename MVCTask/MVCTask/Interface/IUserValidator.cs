@@ -5,6 +5,6 @@ namespace MVCTask.Interface
 {
     public interface IUserValidator
     {
-        ValidationResult ValidateUser(UserModel user);
+        ValidationResult ValidateUser(NewEditUserModel user);
     }
 }

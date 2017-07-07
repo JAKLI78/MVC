@@ -21,7 +21,7 @@ namespace MVCTask.Core.Services
         }
 
 
-        public IEnumerable<string> GetTitelsForUserById(int userId)
+        public IEnumerable<string> GetTitelsByUserId(int userId)
         {
             return _titleRepository.GetNamesByUserId(userId);
         }

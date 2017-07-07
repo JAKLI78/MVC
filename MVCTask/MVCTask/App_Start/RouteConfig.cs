@@ -15,9 +15,9 @@ namespace MVCTask
                 new {controller = "Users", action = "Index", id = UrlParameter.Optional}
             );
             routes.MapRoute(
-                "NewUser",
-                "{controller}/{action}/{id}",
-                new {controller = "NewUser", action = "NewUser", id = UrlParameter.Optional}
+                "Search",
+                "{controller}/{action}/{req}/{page}",
+                new { controller = "Users", action = "Find",req ="", id = UrlParameter.Optional }
             );
         }
     }

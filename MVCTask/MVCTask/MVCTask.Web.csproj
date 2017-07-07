@@ -85,6 +85,12 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.3.1.1.134\lib\net40\StructureMap.dll</HintPath>
     </Reference>
@@ -197,8 +203,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\StructuremapMvc.cs" />
-    <Compile Include="Controllers\AsyncImageController.cs" />
-    <Compile Include="Controllers\NewUserController.cs" />
+    <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\NewEditUserController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -209,13 +215,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Filters\CreateEditFilter.cs" />
-    <Compile Include="Filters\DeleteFilter.cs" />
-    <Compile Include="Filters\IndexFilter.cs" />
-    <Compile Include="Filters\NewEditUserFilter.cs" />
-    <Compile Include="Filters\SearchFilter.cs" />
-    <Compile Include="Interface\ILogService.cs" />
+    <Compile Include="Filters\LogActionFilter.cs" />
     <Compile Include="Interface\IUserValidator.cs" />
+    <Compile Include="Models\NewEditUserModel.cs" />
     <Compile Include="Registers\CoreRegister.cs" />
     <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -231,6 +233,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -307,7 +310,7 @@
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\NewUser\NewUser.cshtml" />
+    <Content Include="Views\NewEditUser\NewEditUser.cshtml" />
     <Content Include="Views\Shared\Log.cshtml" />
   </ItemGroup>
   <ItemGroup>

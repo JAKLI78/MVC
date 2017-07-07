@@ -4,7 +4,7 @@ namespace MVCTask.Core.Interface
 {
     public interface ITitelsServise
     {
-        IEnumerable<string> GetTitelsForUserById(int titleId);
+        IEnumerable<string> GetTitelsByUserId(int titleId);
         void CreateTitle(string titel, int userId);
         void RemoveTitle(int userId);
         void RemoveTitle(int userId, string title);

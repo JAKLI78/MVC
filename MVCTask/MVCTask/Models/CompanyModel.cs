@@ -4,8 +4,6 @@
     {
         public int Id { get; set; }
         public string CompanyName { get; set; }
-        public int MaxCountOfUsers { get; set; }
-        public int CurrentCountOfUsers { get; set; }
-        public CompanyModel ThisModel { get; set; }
+        public int MaxCountOfUsers { get; set; }        
     }
 }

@@ -17,6 +17,7 @@ namespace MVCTask.Core.Interface
             string fileUrl);
 
         void DeleteUser(int userId);
-        Task<string> AsyncGetFileUrlById(int userId);
+        User FindUserById(int userId);
+        Task<string> GetFileUrlByIdAsync(int userId);
     }
 }

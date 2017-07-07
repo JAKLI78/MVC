@@ -23,15 +23,15 @@ using WebActivatorEx;
 [assembly: ApplicationShutdownMethod(typeof(StructuremapMvc), "End")]
 
 namespace MVCTask.App_Start {
-	using System.Web.Mvc;
+    using System.Web.Mvc;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
-	using MVCTask.DependencyResolution;
+    using MVCTask.DependencyResolution;
 
     using StructureMap;
 
-	using FluentValidation.Mvc;
+    using FluentValidation.Mvc;
 
     using MVCTask.Validator;
 
@@ -42,9 +42,9 @@ namespace MVCTask.App_Start {
 
         #endregion
 		
-		#region Public Methods and Operators
+	    #region Public Methods and Operators
 		
-		public static void End() {
+	    public static void End() {
             StructureMapDependencyScope.Dispose();
         }
 		

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Castle.Core.Internal;
@@ -6,12 +7,16 @@ using MVCTask.Core.Interface;
 using MVCTask.Data.Model;
 using MVCTask.Filters;
 using MVCTask.Models;
+using PagedList;
 
 namespace MVCTask.Controllers
 {
+    [LogActionFilter]
     public class UsersController : BaseController
     {
         private readonly ICompanyService _companyService;
+
+        private readonly int _maxCount = 5;
         private readonly ISearchService _searchService;
 
         private readonly ITitelsServise _titelsServise;
@@ -36,35 +41,40 @@ namespace MVCTask.Controllers
             _titelsServise = titelsServise;
         }
 
-        [IndexFilter]
-        // GET: Users
-        public ActionResult Index()
-        {
-            var model = GetModelWithAllUsers();
 
-            return View(model);
+        // GET: Users
+        public ActionResult Index(int? page)
+        {
+            var users = GetAllUsers();
+
+            return View(new UsersViewModel
+            {
+                UserModels = (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount)
+            });
         }
 
-        [SearchFilter]
-        [HttpPost]
-        public ActionResult Find(UsersViewModel model)
+
+        [HttpGet]
+        public ActionResult Find(string req, int? page)
         {
-            var returnModel = new UsersViewModel {Search = model.Search};
-            if (model.Search.IsNullOrEmpty())
+            var returnModel = new UsersViewModel();
+            if (req.IsNullOrEmpty())
             {
-                returnModel.UserModels = GetModelWithAllUsers().UserModels;
+                var users =
+                    returnModel.UserModels =
+                        (PagedList<UserModel>) GetAllUsers().ToPagedList(page.GetValueOrDefault(1), _maxCount);
             }
             else
             {
-                var usersFromSearch = _searchService.FindUsers(model.Search);
+                var usersFromSearch = _searchService.FindUsers(req);
                 var users = usersFromSearch.Select(FillUser).ToList();
-                returnModel.UserModels = users;
+                returnModel.UserModels = (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount);
             }
 
             return View("Index", returnModel);
         }
 
-        [DeleteFilter]
+        [HttpPost]
         public ActionResult DeleteUser()
         {
             var userId = 0;
@@ -78,7 +88,7 @@ namespace MVCTask.Controllers
         private UserModel FillUser(User user)
         {
             var companyName = _companyService.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
-            var titels = _titelsServise.GetTitelsForUserById(user.Id);
+            var titels = _titelsServise.GetTitelsByUserId(user.Id);
             var strTitels = "";
             if (titels.Any())
                 strTitels = $"( {titels.Aggregate((current, str) => current + ", " + str)} )";
@@ -87,18 +97,17 @@ namespace MVCTask.Controllers
                 Id = user.Id,
                 BirthDate = user.BirthDate,
                 CompanyName = companyName,
-                Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
                 TitlesForView = strTitels
             };
         }
 
-        private UsersViewModel GetModelWithAllUsers()
+        private List<UserModel> GetAllUsers()
         {
             var someUser = _userService.GetUsers();
             var users = someUser.Select(user => FillUser(user)).ToList();
-            return new UsersViewModel {UserModels = users};
+            return users;
         }
     }
 }

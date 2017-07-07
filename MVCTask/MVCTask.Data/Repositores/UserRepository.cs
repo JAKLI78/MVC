@@ -20,7 +20,7 @@ namespace MVCTask.Data.Repositores
 
         public Task<User> AsyncFindUser(int userId)
         {
-            return Task.Run(() => { return Get(u => u.Id == userId).First(); });
+            return Task.Run(() => FindById(userId));
         }
     }
 }

@@ -59,7 +59,12 @@ namespace MVCTask.Core.Services
             _userRepository.Remove(_userRepository.FindById(userId));
         }
 
-        public Task<string> AsyncGetFileUrlById(int userId)
+        public User FindUserById(int userId)
+        {
+            return _userRepository.FindById(userId);
+        }
+
+        public Task<string> GetFileUrlByIdAsync(int userId)
         {
             return _userRepository.AsyncGetFileUrl(userId);
         }

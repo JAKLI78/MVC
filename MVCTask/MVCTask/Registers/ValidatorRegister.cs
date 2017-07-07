@@ -11,7 +11,7 @@ namespace MVCTask.Registers
         public ValidatorRegister()
         {
             For<IUserValidator>().Use<UserValidator>();
-            For<AbstractValidator<UserModel>>().Use<UserValidator>();
+            For<AbstractValidator<NewEditUserModel>>().Use<UserValidator>();
         }
     }
 }

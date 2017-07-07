@@ -8,17 +8,16 @@ namespace MVCTask.Core.Services
 {
     public class ImageService : IImageService
     {
-        public async Task<byte[]> GetImage(string path)
+        public async Task<byte[]> GetImageAsync(string path)
         {
             var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
             var img = new Bitmap(fileStream);
             fileStream.Close();
 
-            return await ImageResize(img);
+            return await ImageResizeAsync(img);
         }
 
-
-        private static async Task<byte[]> ImageResize(Image image)
+        private static async Task<byte[]> ImageResizeAsync(Image image)
         {
             return await Task.Run(() =>
             {

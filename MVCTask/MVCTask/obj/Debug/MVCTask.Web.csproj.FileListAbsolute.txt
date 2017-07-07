@@ -110,3 +110,7 @@ E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\System.Web.Http.xml
 E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\System.Web.Http.Owin.xml
 E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\FluentValidation.Mvc.dll
 E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\FluentValidation.Mvc.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\PagedList.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\PagedList.Mvc.dll
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\PagedList.xml
+E:\STUDY\PRACTICE\PROJECT\Some\MVC\MVCTask\MVCTask\bin\PagedList.Mvc.xml

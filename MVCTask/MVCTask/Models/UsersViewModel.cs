@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using PagedList;
 
 namespace MVCTask.Models
 {
     public class UsersViewModel
     {
-        public List<UserModel> UserModels { get; set; }
-        public string Search { get; set; }
+        public PagedList<UserModel> UserModels { get; set; }
     }
 }
