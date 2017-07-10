@@ -34,19 +34,20 @@ namespace MVCTask.Core.Services
             if (companys.Any())
                 foreach (var company in companys)
                     result.AddRange(_userRepository.Get(u => u.CompanyId == company.Id));
-            var users = _userRepository.Get(u => u.Name.Contains(arg) || u.Surname.Contains(arg) ||
+            var users = _userRepository.Get(u => u.Name.Contains(arg) | u.Surname.Contains(arg) |
                                                  u.BirthDate.ToString().Contains(arg));
             if (users.Any())
                 foreach (var user in users)
-                    if (!result.Contains(user))
+                    if (!result.Exists(u => u.Id == user.Id))
                         result.Add(user);
             var titles = _titleRepository.Get(t => t.Name.Contains(arg));
             if (titles.Any())
                 foreach (var title in titles)
                 {
                     var user = _userRepository.FindById(title.UserId);
-                    if (!result.Contains(user))
-                        result.Add(user);
+                    if (user != null)
+                        if (!result.Exists(u => u.Id == user.Id))
+                            result.Add(user);
                 }
             return result;
         }

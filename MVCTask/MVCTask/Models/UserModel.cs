@@ -23,6 +23,5 @@ namespace MVCTask.Models
 
         [HiddenInput(DisplayValue = false)]
         public IEnumerable<CompanyModel> CompanyModels { get; set; }
-        
     }
 }

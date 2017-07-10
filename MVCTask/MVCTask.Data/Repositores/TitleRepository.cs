@@ -16,7 +16,7 @@ namespace MVCTask.Data.Repositores
         public IEnumerable<string> GetNamesByUserId(int userId)
         {
             try
-            {                
+            {
                 return Get(t => t.UserId == userId).Select(title => title.Name).ToList();
             }
             catch (Exception e)
@@ -24,7 +24,5 @@ namespace MVCTask.Data.Repositores
                 return new List<string> {""};
             }
         }
-
-
     }
 }

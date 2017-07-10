@@ -7,43 +7,37 @@
 
 <!DOCTYPE html>
 
+
 <html>
 <head>
     <script src="~/Scripts/jquery-1.12.4.min.js"></script>
-    <script type="text/javascript">
-        function DeleteOrNot() {
-
-        }
-    </script>
-    <script type="text/javascript">
-        function FindUsers() {
-
-            var search = $("#Search").val();
-            var url = '/Users/Find?req=' + search;
-            window.location = url;
-        }
-
-
-    </script>
-    <script type="text/C#">
-        @{
-            Html.ViewBag.Log = Html.ViewData["log"];
-        }
-    </script>
+    <link href="~/Content/SiteStyle.css" rel="stylesheet"/>
+    <script src="~/Scripts/IndexScripts.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/Content/PagedList.css" rel="stylesheet"/>
     <title>Users</title>
 </head>
 <body>
 <div>
     @using (Html.BeginForm("Find", "Users"))
     {
-        <ul>
-            <li>Users</li>
+        <ul class="float-right">
+            <li>
+                <span class="h4"> Users</span>
+            </li>
+            <li>
+                <input type="button" value="New user" onclick="NewUser();"/>
+
+            </li>
+            <li>
+                <input type="button" value="Find" onclick="FindUsers();"/>
+            </li>
             <li>
                 @{
                     if (Request.Url.AbsoluteUri.Contains("Find"))
                     {
                         var findReq = Request.QueryString["req"];
-                        <input id="Search" type="text" value="@findReq"/>
+                        <input id="Search" class="float-right" type="text" value="@findReq"/>
                     }
                     else
                     {
@@ -51,84 +45,81 @@
                     }
                 }
             </li>
-
-            <li>
-                <input type="button" value="Find" onclick="FindUsers();"/>
-            </li>
-            <li>
-                <a href="@Url.Action("NewUser", "NewEditUser")">New user</a>
-            </li>
         </ul>
-        if (Model.UserModels.Count > 0)
-        {
-            <table>
-                <thead>
-                <tr>
-                    <th>Name</th> <th></th> <th>Birth Date</th><th>Company</th><th>Actions</th>
-                </tr>
-                </thead>
-                @foreach (var item in Model.UserModels)
+        <ul class="text-center">
+            <li>
+                @if (Model.UserModels.Count > 0)
                 {
-                    <tr>
-                        <td>
-                            @item.Name @item.Surname @item.TitlesForView
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr class="">
+                            <th>Name</th> <th></th> <th>Birth Date</th><th>Company</th><th>Actions</th>
+                        </tr>
+                        </thead>
+                        @foreach (var item in Model.UserModels)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Name @item.Surname @item.TitlesForView
 
-                        </td>
-                        <td>
-                            <img class="img" id="@item.Id" src="@Url.Action("GetUserImage", "Image", new {item.Id})"/>
-                        </td>
-                        <td>@Html.DisplayFor(m => m.UserModels.First(u => u.Id == item.Id).BirthDate)</td>
-                        <td>@item.CompanyName</td>
-                        @{
-                            var dic = new Dictionary<string, object>();
-                            dic.Add("id", item.Id);
-                            <td>
-                                <a href="@Url.Action("NewUser", "NewEditUser", new RouteValueDictionary(dic))">edit</a> 
-                                @Ajax.ActionLink("delete","DeleteUser", new RouteValueDictionary(dic),new AjaxOptions(){HttpMethod = "POST"})
-                                <a onclick="return confirm('Вы точно хотите удалиь этого пользователя?')" href="@Url.Action("DeleteUser", "Users", new RouteValueDictionary(dic))">delete</a>
-                            </td>
+                                </td>
+                                <td>
+                                    <img class="img" id="@item.Id" src="@Url.Action("GetUserImage", "Image", new {item.Id})"/>
+                                </td>
+                                <td>@Html.DisplayFor(m => m.UserModels.First(u => u.Id == item.Id).BirthDate)</td>
+                                <td>@item.CompanyName</td>
+                                @{
+                                    var dic = new Dictionary<string, object> {{"id", item.Id}};
+                                    <td>
+                                        <a href="@Url.Action("NewUser", "Users", new RouteValueDictionary(dic))">edit</a>
+                                        <a onclick="DeleteUser(@item.Id);" href="javascript:;">delete</a>
+                                    </td>
+                                }
+
+                            </tr>
                         }
 
-                    </tr>
+                    </table>
                 }
-            </table>
-        }
+            </li>
 
-        <div>
-            @{
-                if (Request.Url.AbsoluteUri.Contains("Find"))
-                {
-                    var req = Request.QueryString["req"];
 
-                    @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {req, page}),
-                        new PagedListRenderOptions
-                        {
-                            LinkToFirstPageFormat = "<<",
-                            LinkToPreviousPageFormat = "Назад",
-                            LinkToNextPageFormat = "Вперед",
-                            LinkToLastPageFormat = ">>"
-                        })
-                }
-                else
-                {
-                    @Html.PagedListPager(Model.UserModels, page => Url.Action("Index", new {page}),
-                        new PagedListRenderOptions
-                        {
-                            LinkToFirstPageFormat = "<<",
-                            LinkToPreviousPageFormat = "Назад",
-                            LinkToNextPageFormat = "Вперед",
-                            LinkToLastPageFormat = ">>"
-                        })
-                }
-            }
-
-        </div>
+        </ul>
     }
+    <div class="text-center">
+        @{
+            if (Request.Url.AbsoluteUri.Contains("Find"))
+            {
+                var req = Request.QueryString["req"];
 
-
+                @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {req, page}),
+                    new PagedListRenderOptions
+                    {
+                        LinkToFirstPageFormat = "<<",
+                        LinkToPreviousPageFormat = "Назад",
+                        LinkToNextPageFormat = "Вперед",
+                        LinkToLastPageFormat = ">>"
+                    })
+            }
+            else
+            {
+                @Html.PagedListPager(Model.UserModels, page => Url.Action("Index", new {page}),
+                    new PagedListRenderOptions
+                    {
+                        LinkToFirstPageFormat = "<<",
+                        LinkToPreviousPageFormat = "Назад",
+                        LinkToNextPageFormat = "Вперед",
+                        LinkToLastPageFormat = ">>"
+                    })
+            }
+        }
+    </div>
 
 
 </div>
-@Html.Partial("Log");
+
+@Html.Partial("Log")
+
+
 </body>
 </html>
