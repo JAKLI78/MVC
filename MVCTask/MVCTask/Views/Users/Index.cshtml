@@ -1,0 +1,125 @@
+﻿@using PagedList.Mvc
+@model MVCTask.Models.UsersViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+
+<html>
+<head>
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <link href="~/Content/SiteStyle.css" rel="stylesheet"/>
+    <script src="~/Scripts/IndexScripts.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/Content/PagedList.css" rel="stylesheet"/>
+    <title>Users</title>
+</head>
+<body>
+<div>
+    @using (Html.BeginForm("Find", "Users"))
+    {
+        <ul class="float-right">
+            <li>
+                <span class="h4"> Users</span>
+            </li>
+            <li>
+                <input type="button" value="New user" onclick="NewUser();"/>
+
+            </li>
+            <li>
+                <input type="button" value="Find" onclick="FindUsers();"/>
+            </li>
+            <li>
+                @{
+                    if (Request.Url.AbsoluteUri.Contains("Find"))
+                    {
+                        var findReq = Request.QueryString["req"];
+                        <input id="Search" class="float-right" type="text" value="@findReq"/>
+                    }
+                    else
+                    {
+                        <input id="Search" type="text" value=""/>
+                    }
+                }
+            </li>
+        </ul>
+        <ul class="text-center">
+            <li>
+                @if (Model.UserModels.Count > 0)
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr class="">
+                            <th>Name</th> <th></th> <th>Birth Date</th><th>Company</th><th>Actions</th>
+                        </tr>
+                        </thead>
+                        @foreach (var item in Model.UserModels)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Name @item.Surname @item.TitlesForView
+
+                                </td>
+                                <td>
+                                    <img class="img" id="@item.Id" src="@Url.Action("GetUserImage", "Image", new {item.Id})"/>
+                                </td>
+                                <td>@Html.DisplayFor(m => m.UserModels.First(u => u.Id == item.Id).BirthDate)</td>
+                                <td>@item.CompanyName</td>
+                                @{
+                                    var dic = new Dictionary<string, object> {{"id", item.Id}};
+                                    <td>
+                                        <a href="@Url.Action("NewUser", "Users", new RouteValueDictionary(dic))">edit</a>
+                                        <a onclick="DeleteUser(@item.Id);" href="javascript:;">delete</a>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    </table>
+                }
+            </li>
+
+
+        </ul>
+    }
+    <div class="text-center">
+        @{
+            if (Request.Url.AbsoluteUri.Contains("Find"))
+            {
+                var req = Request.QueryString["req"];
+
+                @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {req, page}),
+                    new PagedListRenderOptions
+                    {
+                        LinkToFirstPageFormat = "<<",
+                        LinkToPreviousPageFormat = "Назад",
+                        LinkToNextPageFormat = "Вперед",
+                        LinkToLastPageFormat = ">>"
+                    })
+            }
+            else
+            {
+                @Html.PagedListPager(Model.UserModels, page => Url.Action("Index", new {page}),
+                    new PagedListRenderOptions
+                    {
+                        LinkToFirstPageFormat = "<<",
+                        LinkToPreviousPageFormat = "Назад",
+                        LinkToNextPageFormat = "Вперед",
+                        LinkToLastPageFormat = ">>"
+                    })
+            }
+        }
+    </div>
+
+
+</div>
+
+@Html.Partial("Log")
+
+
+</body>
+</html>
