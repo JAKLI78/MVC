@@ -28,7 +28,8 @@ namespace MVCTask.DependencyResolution {
             var reg = new Registry();
             reg.IncludeRegistry<DataRegistry>();
             reg.IncludeRegistry<CoreRegister>(); 
-            reg.IncludeRegistry<ValidatorRegister>();            
+            reg.IncludeRegistry<ValidatorRegister>();  
+            reg.IncludeRegistry<ConfigManagerRegister>();
             var container = new Container(reg);
 
             return container;            

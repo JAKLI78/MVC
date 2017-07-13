@@ -16,13 +16,13 @@ namespace MVCTask.Filters
             {
                 filterContext.HttpContext.Session.Add("log", string.Format("{0} Action {1} starts",
                                                                  DateTime.Now,
-                                                                 filterContext.ActionDescriptor.ActionName) + " \n ");
+                                                                 filterContext.ActionDescriptor.ActionName) + " \n");
                 return;
             }
 
             filterContext.HttpContext.Session["log"] = string.Format("{0} Action {1} starts",
                                                            DateTime.Now, filterContext.ActionDescriptor.ActionName) +
-                                                       " \n " + sd;
+                                                       " \n" + sd;
         }
 
         public void OnActionExecuted(ActionExecutedContext filterContext)
@@ -36,13 +36,18 @@ namespace MVCTask.Filters
             {
                 filterContext.HttpContext.Session.Add("log", string.Format("{0} Action {1} ends",
                                                                  DateTime.Now,
-                                                                 filterContext.ActionDescriptor.ActionName) + " \n ");
+                                                                 filterContext.ActionDescriptor.ActionName) + " \n");
                 return;
             }
 
             filterContext.HttpContext.Session["log"] = string.Format("{0} Action {1} ends",
                                                            DateTime.Now, filterContext.ActionDescriptor.ActionName) +
-                                                       " \n " + sd;
+                                                       " \n" + sd;
+        }
+
+        private void WriteActionLog(ControllerContext filterContext)
+        {
+            
         }
     }
 }

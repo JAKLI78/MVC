@@ -9,6 +9,7 @@ using Castle.Components.DictionaryAdapter;
 using Castle.Core.Internal;
 using MVCTask.Core.Interface;
 using MVCTask.Data.Model;
+using MVCTask.Interface;
 using MVCTask.Models;
 using PagedList;
 
@@ -21,11 +22,13 @@ namespace MVCTask.Controllers
         private readonly int _maxCount;
         private readonly ISearchService _searchService;
 
-        private readonly ITitelsServise _titelsServise;
+        private readonly ITitlesServise _titelsServise;
         private readonly IUserService _userService;
 
+        public IConfig ConfigManager { get; set; }
 
-        public UsersController(ITitelsServise titelsServise, IUserService userService,
+
+        public UsersController(ITitlesServise titelsServise, IUserService userService,
             ICompanyService companyService, ISearchService searchService)
         {
             if (titelsServise == null)
@@ -53,25 +56,28 @@ namespace MVCTask.Controllers
 
             return View(new UsersViewModel
             {
-                UserModels = (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount)
+                UserModels = 
+                (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount)
             });
         }
 
 
         [HttpGet]
-        public ActionResult Find(string req, int? page)
+        public ActionResult Find(string search, int? page)
         {
+            ViewBag.Search = search;
             var returnModel = new UsersViewModel();
-            if (req.IsNullOrEmpty())
+            if (search.IsNullOrEmpty())
             {
                 returnModel.UserModels =
                     (PagedList<UserModel>) GetAllUsers().ToPagedList(page.GetValueOrDefault(1), _maxCount);
             }
             else
             {
-                var usersFromSearch = _searchService.FindUsers(req);
+                var usersFromSearch = _searchService.FindUsers(search);
                 var users = usersFromSearch.Select(FillUser).ToList();
-                returnModel.UserModels = (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount);
+                returnModel.UserModels = 
+                    (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount);
             }
 
             return View("Index", returnModel);
@@ -79,20 +85,12 @@ namespace MVCTask.Controllers
 
         public ActionResult NewUser(int? id)
         {
-            var model = new NewEditUserModel
-            {
-                Surname = "",
-                Name = "",
-                Email = "",
-                Title = new List<string> {""}
-            };
-            ViewBag.Title = "New user";
+            var model = new NewEditUserModel();
+     
             if (id > 0)
             {
-                var userToEdit = _userService.FindUserById(id.Value);
-                var userTitels = _titelsServise.GetTitelsByUserId(id.Value);
-                if (!userTitels.Any())
-                    userTitels = new List<string> {""};
+                var userToEdit = _userService.FindUserByIdWithTitles(id.Value);
+                
                 ViewBag.Title = "Edit user";
                 model = new NewEditUserModel
                 {
@@ -102,7 +100,7 @@ namespace MVCTask.Controllers
                     Name = userToEdit.Name,
                     Surname = userToEdit.Surname,
                     CompanyId = userToEdit.CompanyId.GetValueOrDefault(),
-                    Title = (ICollection<string>) userTitels,
+                    Title = GetUserTitlesNames(userToEdit.Titles),
                     StrImage = userToEdit.FileUrl
                 };
             }
@@ -112,6 +110,7 @@ namespace MVCTask.Controllers
                 model.Name = "";
                 model.Email = "";
                 model.Title = new List<string> {""};
+                ViewBag.Title = "New user";
             }
             model.CompanyModels = BuildCompanyModelsForView();
 
@@ -119,37 +118,49 @@ namespace MVCTask.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser(HttpPostedFileBase file, NewEditUserModel model, FormCollection formCollection)
+        public ActionResult CreateUser(HttpPostedFileBase file, NewEditUserModel model)
         {
             if (ModelState.IsValid)
             {
-                var path = "";
+                string path = null;
                 if (!string.IsNullOrEmpty(model.StrImage))
                 {
                     path = model.StrImage;
                 }
                 else if (file != null)
                 {
-                    var fil = Path.GetFileName(file.FileName);
-                    path = Server.MapPath(ConfigurationManager.AppSettings["PhotoPath"] + fil);
-                    file.SaveAs(path);
+                    var filePath = Path.GetFileName(file.FileName);
+                    
+                    path = Path.Combine(ConfigManager.GetSittingsValueByKey("PhotoPath"), filePath);
+                    file.SaveAs(Server.MapPath(path));
                 }
                 if (model.Id > 0)
                 {
-                    _userService.UpdateUser(model.Id, model.Name, model.Surname, model.Email,
-                        model.BirthDate.GetValueOrDefault(),
-                        model.CompanyId, path);
-                    var oldCountOfTitels = _titelsServise.GetTitelsByUserId(model.Id);
-                    foreach (var oldCountOfTitel in oldCountOfTitels)
-                        _titelsServise.RemoveTitle(model.Id, oldCountOfTitel);
-                    foreach (var s in model.Title)
-                        if (s.Length > 0)
-                            _titelsServise.CreateTitle(s, model.Id);
+                    var userToUpdate = new User()
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+                        Surname = model.Surname,
+                        Email = model.Email,
+                        BirthDate = model.BirthDate.GetValueOrDefault(),
+                        CompanyId = model.CompanyId,
+                        FileUrl = path
+                    };
+                    _userService.UpdateUser(userToUpdate);                    
+                    _titelsServise.UpdateUserTitles(model.Id, model.Title);                    
                 }
                 else
                 {
-                    _userService.CreateUser(model.Name, model.Surname, model.Email, model.BirthDate.GetValueOrDefault(),
-                        model.CompanyId, path);
+                    var userToCreate = new User()
+                    {
+                        Name = model.Name,
+                        Surname = model.Surname,
+                        Email = model.Email,
+                        BirthDate = model.BirthDate.GetValueOrDefault(),
+                        CompanyId = model.CompanyId,
+                        FileUrl = path
+                    };
+                    _userService.CreateUser(userToCreate);
                     var uId = _userService.GetUsers().First(u => u.Email == model.Email).Id;
                     foreach (var s in model.Title)
                         _titelsServise.CreateTitle(s, uId);
@@ -157,8 +168,7 @@ namespace MVCTask.Controllers
 
                 return RedirectToAction("Index", "Users");
             }
-
-            model.Title = new List<string> {""};
+            
             model.CompanyModels = BuildCompanyModelsForView();
             ViewBag.Title = "New user";
             if (model.Id > 0)
@@ -170,33 +180,39 @@ namespace MVCTask.Controllers
         [HttpDelete]
         public ActionResult DeleteUser(int id)
         {
-            _userService.DeleteUser(id);
-
+            if (_userService.isUserExist(id))
+            {
+                _userService.DeleteUser(id);
+            }
             return Json(new {result = "Redirect", url = Url.Action("index", "Users")});
         }
 
         private UserModel FillUser(User user)
         {
-            var companyName = _companyService.GetCompanyNameById(user.CompanyId.GetValueOrDefault());
-            var titles = _titelsServise.GetTitelsByUserId(user.Id);
-            var strTitels = "";
-            if (titles.Any())
-                strTitels = "(" + string.Join(", ", titles) + ")";
             return new UserModel
             {
                 Id = user.Id,
                 BirthDate = user.BirthDate,
-                CompanyName = companyName,
+                CompanyName = user.Company.Name,
                 Name = user.Name,
                 Surname = user.Surname,
-                TitlesForView = strTitels
+                TitlesForView = GetUserTitlesNamesByOneString(user.Titles)
             };
+        }
+
+        private ICollection<string> GetUserTitlesNames(ICollection<Title> titles)
+        {
+            if (titles.Any())
+            {
+                return new List<string>(titles.Select(t => t.Name));
+            }
+            return new List<string>(){""};
         }
 
         private List<UserModel> GetAllUsers()
         {
-            var someUser = _userService.GetUsers();
-            var users = someUser.Select(user => FillUser(user)).ToList();
+            var tmpUsers = _userService.GetUsersWithAllInfo();
+            var users = tmpUsers.Select(FillUser).ToList();
             return users;
         }
 
@@ -210,11 +226,25 @@ namespace MVCTask.Controllers
             companyModels.AddRange(companies.Select(company => new CompanyModel
             {
                 CompanyName = company.Name,
-                Id = company.Id,
-                MaxCountOfUsers = company.MaxCounOfUsers
+                Id = company.Id,                
             }));
 
             return companyModels;
+        }
+
+        private string GetUserTitlesNamesByOneString(ICollection<Title> titles)
+        {
+            var strTitels = "";
+            if (titles.Any())
+            {
+                strTitels = "( ";
+                foreach (var title in titles)
+                {
+                    strTitels += $"{title.Name}, ";
+                }
+                strTitels = strTitels.Remove(strTitels.LastIndexOf(","), 1) + ")";
+            }
+            return strTitels;
         }
     }
 }

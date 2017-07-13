@@ -3,7 +3,6 @@
     public class CompanyModel
     {
         public int Id { get; set; }
-        public string CompanyName { get; set; }
-        public int MaxCountOfUsers { get; set; }
+        public string CompanyName { get; set; }        
     }
 }

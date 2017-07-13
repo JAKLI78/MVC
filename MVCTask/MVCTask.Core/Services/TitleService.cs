@@ -7,10 +7,9 @@ using MVCTask.Data.Model;
 
 namespace MVCTask.Core.Services
 {
-    public class TitleService : ITitelsServise
+    public class TitleService : ITitlesServise
     {
         private readonly ITitleRepository _titleRepository;
-
 
         public TitleService(
             ITitleRepository titleRepository)
@@ -19,7 +18,6 @@ namespace MVCTask.Core.Services
                                throw new ArgumentNullException(nameof(titleRepository),
                                    $"{nameof(titleRepository)} cannot be null.");
         }
-
 
         public IEnumerable<string> GetTitelsByUserId(int userId)
         {
@@ -36,9 +34,40 @@ namespace MVCTask.Core.Services
             _titleRepository.Remove(_titleRepository.Get(t => t.UserId == userId).First());
         }
 
-        public void RemoveTitle(int userId, string title)
+        public void UpdateUserTitles(int userId, ICollection<string> titleNames)
         {
-            _titleRepository.Remove(_titleRepository.Get(t => (t.UserId == userId) & (t.Name == title)).First());
+            var currentUserTitles = _titleRepository.GetUserTitels(userId);
+            var tmpTitels = new List<string>(titleNames);
+            var titlesToDelete = new List<Title>();
+            foreach (var currentUserTitle in currentUserTitles)
+            {
+                                
+                if (!titleNames.Contains(currentUserTitle.Name))
+                {
+                    titlesToDelete.Add(currentUserTitle);
+                }
+                else
+                {
+                    tmpTitels.Remove(currentUserTitle.Name);                        
+                }                                   
+            }
+            if (tmpTitels.Any())
+            {
+                foreach (var titleName in tmpTitels)
+                {
+                    if (titleName.Length > 0)
+                    {
+                        CreateTitle(titleName, userId);
+                    }
+                }                    
+            }
+            if (titlesToDelete.Any())
+            {
+                foreach (var title in titlesToDelete)
+                {
+                    _titleRepository.Remove(title);
+                }
+            }
         }
     }
 }

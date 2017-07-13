@@ -11,10 +11,10 @@ namespace MVCTask.Core.Registers
     {
         public DataRegistry()
         {
-            For<IUserRepository>().Use<UserRepository>().LifecycleIs<UniquePerRequestLifecycle>();
-            For<ICompanyRepository>().Use<CompanyRepository>().LifecycleIs<UniquePerRequestLifecycle>();
-            For<ITitleRepository>().Use<TitleRepository>().LifecycleIs<UniquePerRequestLifecycle>();
-            For<DbContext>().Use<DataContext>().LifecycleIs<UniquePerRequestLifecycle>();
+            For<IUserRepository>().Use<UserRepository>().LifecycleIs<TransientLifecycle>();
+            For<ICompanyRepository>().Use<CompanyRepository>().LifecycleIs<TransientLifecycle>();
+            For<ITitleRepository>().Use<TitleRepository>().LifecycleIs<TransientLifecycle>();
+            For<DbContext>().Use<DataContext>().LifecycleIs<TransientLifecycle>();
         }
     }
 }

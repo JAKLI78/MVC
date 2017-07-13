@@ -14,15 +14,10 @@ namespace MVCTask.Data.Repositores
 
         public string GetNameById(int companyId)
         {
-            try
-            {
-                var result = Get(c => c.Id == companyId).First().Name;
-                return result;
-            }
-            catch (Exception e)
-            {
-                return "";
-            }
+            var usersWithId = Get(c => c.Id == companyId);
+            if (usersWithId == null) return "";
+            var result = usersWithId.First().Name;
+            return result;
         }
     }
 }

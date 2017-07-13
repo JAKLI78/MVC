@@ -17,13 +17,13 @@ namespace MVCTask.Filters
                 filterContext.HttpContext.Session.Add("log", string.Format("{0} Action {1} result  starts",
                                                                  DateTime.Now,
                                                                  filterContext.RequestContext.RouteData
-                                                                     .Values["Action"]) + " \n ");
+                                                                     .Values["Action"]) + " \n");
                 return;
             }
             filterContext.HttpContext.Session["log"] = string.Format("{0} Action {1} result starts",
                                                            DateTime.Now,
                                                            filterContext.RequestContext.RouteData.Values["Action"]) +
-                                                       " \n " + sd;
+                                                       " \n" + sd;
         }
 
         public void OnResultExecuted(ResultExecutedContext filterContext)
@@ -38,13 +38,13 @@ namespace MVCTask.Filters
                 filterContext.HttpContext.Session.Add("log", string.Format("{0} Action {1} result ends",
                                                                  DateTime.Now,
                                                                  filterContext.RequestContext.RouteData
-                                                                     .Values["Action"]) + " \n ");
+                                                                     .Values["Action"]) + "\n");
                 return;
             }
             filterContext.HttpContext.Session["log"] = string.Format("{0} Action {1} result ends",
                                                            DateTime.Now,
                                                            filterContext.RequestContext.RouteData.Values["Action"]) +
-                                                       " \n " + sd;
+                                                       "\n" + sd;
         }
     }
 }

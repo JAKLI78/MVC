@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MVCTask.Core.Interface;
 using MVCTask.Data.Interface;
@@ -23,35 +24,19 @@ namespace MVCTask.Core.Services
             return _userRepository.Get();
         }
 
-        public void CreateUser(string name, string surname, string email, DateTime birthDate, int companyId,
-            string fileUrl)
-        {
-            var user = new User
-            {
-                Email = email,
-                BirthDate = birthDate,
-                CompanyId = companyId,
-                FileUrl = fileUrl,
-                Name = name,
-                Surname = surname
-            };
+        public void CreateUser(User user)
+        {            
             _userRepository.Create(user);
         }
 
-        public void UpdateUser(int userId, string name, string surname, string email, DateTime birthDate, int companyId,
-            string fileUrl)
-        {
-            var user = new User
-            {
-                Id = userId,
-                Email = email,
-                BirthDate = birthDate,
-                CompanyId = companyId,
-                FileUrl = fileUrl,
-                Name = name,
-                Surname = surname
-            };
+        public void UpdateUser(User user)
+        {            
             _userRepository.Update(user);
+        }
+
+        public bool isUserExist(int userId)
+        {
+            return _userRepository.Query().Where(u => u.Id == userId).Any();
         }
 
         public void DeleteUser(int userId)
@@ -64,9 +49,24 @@ namespace MVCTask.Core.Services
             return _userRepository.FindById(userId);
         }
 
-        public Task<string> GetFileUrlByIdAsync(int userId)
+        public User FindUserByIdWithTitles(int userId)
         {
-            return _userRepository.AsyncGetFileUrl(userId);
+            return _userRepository.FindUserInclude(userId);
+        }
+
+        public Task<string> GetFileUriByIdAsync(int userId)
+        {
+            return _userRepository.GetFileUrlAsync(userId);
+        }
+
+        public IEnumerable<User> GetUsersWithCompany()
+        {
+            return _userRepository.GetUsersWithCompanyNames();
+        }
+
+        public IEnumerable<User> GetUsersWithAllInfo()
+        {
+            return _userRepository.GetUsersWithAllInfo();
         }
     }
 }

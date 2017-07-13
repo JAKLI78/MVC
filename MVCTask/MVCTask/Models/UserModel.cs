@@ -19,6 +19,8 @@ namespace MVCTask.Models
 
         public string CompanyName { get; set; }
 
+
+
         public DateTime? BirthDate { get; set; }
 
         [HiddenInput(DisplayValue = false)]

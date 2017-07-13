@@ -4,6 +4,6 @@ namespace MVCTask.Core.Interface
 {
     public interface IImageService
     {
-        Task<byte[]> GetImageAsync(string path);
+        Task<byte[]> GetResizedImageAsync(string path);
     }
 }

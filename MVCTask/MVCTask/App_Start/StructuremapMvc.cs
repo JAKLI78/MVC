@@ -41,13 +41,13 @@ namespace MVCTask.App_Start {
         public static StructureMapDependencyScope StructureMapDependencyScope { get; set; }
 
         #endregion
-		
-	    #region Public Methods and Operators
-		
-	    public static void End() {
+
+        #region Public Methods and Operators
+
+        public static void End() {
             StructureMapDependencyScope.Dispose();
         }
-		
+
         public static void Start() {
             IContainer container = IoC.Initialize();
             StructureMapDependencyScope = new StructureMapDependencyScope(container);

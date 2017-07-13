@@ -11,41 +11,35 @@
 <html>
 <head>
     <script src="~/Scripts/jquery-1.12.4.min.js"></script>
-    <link href="~/Content/SiteStyle.css" rel="stylesheet"/>
+    <link href="~/Content/Site.css" rel="stylesheet"/>
     <script src="~/Scripts/IndexScripts.js"></script>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
     <link href="~/Content/PagedList.css" rel="stylesheet"/>
     <title>Users</title>
 </head>
 <body>
-<div>
-    @using (Html.BeginForm("Find", "Users"))
-    {
-        <ul class="float-right">
+<div>        
+    <ul class="float-right">
+        
+        @using (Html.BeginForm("Find", "Users", FormMethod.Get))
+        {
             <li>
-                <span class="h4"> Users</span>
+             <span class="h4"> Users</span>
             </li>
             <li>
                 <input type="button" value="New user" onclick="NewUser();"/>
 
             </li>
             <li>
-                <input type="button" value="Find" onclick="FindUsers();"/>
+                <input type="submit" value="Find" />
             </li>
             <li>
-                @{
-                    if (Request.Url.AbsoluteUri.Contains("Find"))
-                    {
-                        var findReq = Request.QueryString["req"];
-                        <input id="Search" class="float-right" type="text" value="@findReq"/>
-                    }
-                    else
-                    {
-                        <input id="Search" type="text" value=""/>
-                    }
-                }
+                <input id="Search" name="Search" type="text" value="@ViewBag.Search"/>
             </li>
-        </ul>
+            
+        }
+
+    </ul>
         <ul class="text-center">
             <li>
                 @if (Model.UserModels.Count > 0)
@@ -75,24 +69,20 @@
                                         <a onclick="DeleteUser(@item.Id);" href="javascript:;">delete</a>
                                     </td>
                                 }
-
                             </tr>
                         }
-
                     </table>
                 }
             </li>
-
-
         </ul>
-    }
+    
     <div class="text-center">
         @{
             if (Request.Url.AbsoluteUri.Contains("Find"))
             {
-                var req = Request.QueryString["req"];
+                
 
-                @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {req, page}),
+                @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {ViewBag.Search, page}),
                     new PagedListRenderOptions
                     {
                         LinkToFirstPageFormat = "<<",

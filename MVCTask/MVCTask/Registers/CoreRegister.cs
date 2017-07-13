@@ -8,7 +8,7 @@ namespace MVCTask.Registers
     {
         public CoreRegister()
         {
-            For<ITitelsServise>().Use<TitleService>();
+            For<ITitlesServise>().Use<TitleService>();
             For<IImageService>().Use<ImageService>();
             For<ICompanyService>().Use<CompanyService>();
             For<IUserService>().Use<UserService>();

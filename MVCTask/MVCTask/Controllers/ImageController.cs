@@ -22,8 +22,12 @@ namespace MVCTask.Controllers
 
         public async Task<FileResult> GetUserImage(int id)
         {
-            var fileUrl = await _userService.GetFileUrlByIdAsync(id);
-            var imageByteArray = await _imageService.GetImageAsync(fileUrl);
+            var fileUrl = await _userService.GetFileUriByIdAsync(id);
+            if (!string.IsNullOrEmpty(fileUrl))
+            {
+                fileUrl = Server.MapPath(fileUrl);
+            }
+            var imageByteArray = await _imageService.GetResizedImageAsync(fileUrl);
             return File(imageByteArray, "image/jpg");
         }
     }

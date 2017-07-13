@@ -15,14 +15,16 @@ namespace MVCTask.Data.Repositores
 
         public IEnumerable<string> GetNamesByUserId(int userId)
         {
-            try
-            {
-                return Get(t => t.UserId == userId).Select(title => title.Name).ToList();
-            }
-            catch (Exception e)
-            {
-                return new List<string> {""};
-            }
+            var usersWithId = Get(c => c.Id == userId);
+            if (usersWithId == null) return new List<string>(){""};            
+            return usersWithId.
+                Select(title => title.Name).ToList();
+            
+        }
+
+        public IEnumerable<Title> GetUserTitels(int userId)
+        {
+            return Query().Where(t => t.UserId == userId);
         }
     }
 }

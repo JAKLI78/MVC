@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Config\ConfigManager.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
@@ -218,8 +219,10 @@
     <Compile Include="Filters\LogAuthorizationFilter.cs" />
     <Compile Include="Filters\LogExceptionFilter.cs" />
     <Compile Include="Filters\LogResultFilter.cs" />
+    <Compile Include="Interface\IConfig.cs" />
     <Compile Include="Interface\IUserValidator.cs" />
     <Compile Include="Models\NewEditUserModel.cs" />
+    <Compile Include="Registers\ConfigManagerRegister.cs" />
     <Compile Include="Registers\CoreRegister.cs" />
     <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -233,7 +236,6 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\SiteStyle.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -284,6 +286,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Config\AdditionalAppConfig.config" />
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="Scripts\IndexScripts.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
@@ -311,15 +314,12 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Users\NewEditUser.cshtml" />
     <Content Include="Views\Shared\Log.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\NewEditUser\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

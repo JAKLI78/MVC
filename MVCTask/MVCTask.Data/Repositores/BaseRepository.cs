@@ -14,20 +14,22 @@ namespace MVCTask.Data.Repositores
 
         protected BaseRepository(DbContext context)
         {
-            _context = context ?? throw new ArgumentNullException("context");
+            _context = context ?? throw new ArgumentNullException(nameof(context),
+                $"{nameof(context)} cannot be null.");
             _dbSet = context.Set<TEntity>();
         }
 
-        public void Create(TEntity item)
+        public TEntity Create(TEntity item)
         {
-            _dbSet.Add(item);
+            var newItem =_dbSet.Add(item);
             _context.SaveChanges();
+            return newItem;
         }
 
         public TEntity FindById(int id)
         {
             return _dbSet.Find(id);
-        }
+        }        
 
         public IEnumerable<TEntity> Get()
         {
@@ -40,8 +42,7 @@ namespace MVCTask.Data.Repositores
         }
 
         public void Remove(TEntity item)
-        {
-            //_dbSet.Remove(item);
+        {            
             _context.Entry(item).State = EntityState.Deleted;
             _context.SaveChanges();
         }
@@ -66,8 +67,13 @@ namespace MVCTask.Data.Repositores
 
         private IQueryable<TEntity> Include(params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            IQueryable<TEntity> query = _dbSet.AsNoTracking();
+            IQueryable<TEntity> query = _dbSet.AsNoTracking();            
             return includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+        }
+
+        public IQueryable<TEntity> Query()
+        {
+            return _context.Set<TEntity>();
         }
     }
 }

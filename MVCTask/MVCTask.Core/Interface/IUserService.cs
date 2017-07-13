@@ -9,15 +9,16 @@ namespace MVCTask.Core.Interface
     {
         IEnumerable<User> GetUsers();
 
-        void CreateUser(string name, string surname, string email, DateTime birthDate, int companyId,
-            string fileUrl);
+        void CreateUser(User user);
 
-        void UpdateUser(int userId, string name, string surname, string email, DateTime birthDate,
-            int companyId,
-            string fileUrl);
-
+        void UpdateUser(User user);
+        bool isUserExist(int userId);
         void DeleteUser(int userId);
         User FindUserById(int userId);
-        Task<string> GetFileUrlByIdAsync(int userId);
+        User FindUserByIdWithTitles(int userId);
+        Task<string> GetFileUriByIdAsync(int userId);
+        IEnumerable<User> GetUsersWithCompany();
+        IEnumerable<User> GetUsersWithAllInfo();
+
     }
 }

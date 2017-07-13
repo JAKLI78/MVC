@@ -74,7 +74,7 @@
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\TitleService.cs" />
     <Compile Include="Registers\DataRegistry.cs" />
-    <Compile Include="Interface\ITitelsServise.cs" />
+    <Compile Include="Interface\ITitlesServise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

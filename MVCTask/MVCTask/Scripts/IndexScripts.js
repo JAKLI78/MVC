@@ -1,10 +1,4 @@
-﻿function FindUsers() {
-    var search = $("#Search").val();
-    var url = "/Users/Find?req=" + search;
-    window.location = url;
-}
-
-function NewUser() {
+﻿function NewUser() {
     var url = "/Users/NewUser";
     window.location = url;
 }
