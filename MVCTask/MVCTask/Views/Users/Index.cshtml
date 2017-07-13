@@ -78,31 +78,35 @@
     
     <div class="text-center">
         @{
-            if (Request.Url.AbsoluteUri.Contains("Find"))
+            if (Model.UserModels.Any())
             {
-                
+                    if (Request.Url.AbsoluteUri.Contains("Find"))
+                    {
 
-                @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {ViewBag.Search, page}),
-                    new PagedListRenderOptions
+
+                        @Html.PagedListPager(Model.UserModels, page => Url.Action("Find", new {ViewBag.Search, page}),
+                            new PagedListRenderOptions
+                            {
+                                LinkToFirstPageFormat = "<<",
+                                LinkToPreviousPageFormat = "Назад",
+                                LinkToNextPageFormat = "Вперед",
+                                LinkToLastPageFormat = ">>"
+                            })
+                    }
+                    else
                     {
-                        LinkToFirstPageFormat = "<<",
-                        LinkToPreviousPageFormat = "Назад",
-                        LinkToNextPageFormat = "Вперед",
-                        LinkToLastPageFormat = ">>"
-                    })
+                        @Html.PagedListPager(Model.UserModels, page => Url.Action("Index", new {page}),
+                            new PagedListRenderOptions
+                            {
+                                LinkToFirstPageFormat = "<<",
+                                LinkToPreviousPageFormat = "Назад",
+                                LinkToNextPageFormat = "Вперед",
+                                LinkToLastPageFormat = ">>"
+                            })
+                    }
+                }
             }
-            else
-            {
-                @Html.PagedListPager(Model.UserModels, page => Url.Action("Index", new {page}),
-                    new PagedListRenderOptions
-                    {
-                        LinkToFirstPageFormat = "<<",
-                        LinkToPreviousPageFormat = "Назад",
-                        LinkToNextPageFormat = "Вперед",
-                        LinkToLastPageFormat = ">>"
-                    })
-            }
-        }
+        
     </div>
 
 

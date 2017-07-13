@@ -219,8 +219,11 @@
     <Compile Include="Filters\LogAuthorizationFilter.cs" />
     <Compile Include="Filters\LogExceptionFilter.cs" />
     <Compile Include="Filters\LogResultFilter.cs" />
+    <Compile Include="Filters\StructureMapFilterProvider.cs" />
     <Compile Include="Interface\IConfig.cs" />
+    <Compile Include="Interface\ILog.cs" />
     <Compile Include="Interface\IUserValidator.cs" />
+    <Compile Include="LogService\LogService.cs" />
     <Compile Include="Models\NewEditUserModel.cs" />
     <Compile Include="Registers\ConfigManagerRegister.cs" />
     <Compile Include="Registers\CoreRegister.cs" />
@@ -228,6 +231,8 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UsersViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registers\FilterRegister.cs" />
+    <Compile Include="Registers\LogServiceRegister.cs" />
     <Compile Include="Registers\ValidatorRegister.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validator\UserValidator.cs" />

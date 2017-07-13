@@ -53,8 +53,8 @@ namespace MVCTask.App_Start {
             StructureMapDependencyScope = new StructureMapDependencyScope(container);
             DependencyResolver.SetResolver(StructureMapDependencyScope);
             DynamicModuleUtility.RegisterModule(typeof(StructureMapScopeModule));
-            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new ValidatorFactory(container)));
-            DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;
+            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider(new ValidatorFactory(container)));            
+            DataAnnotationsModelValidatorProvider.AddImplicitRequiredAttributeForValueTypes = false;                                   
         }
 
         #endregion

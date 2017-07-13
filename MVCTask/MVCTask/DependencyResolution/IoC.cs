@@ -16,7 +16,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Web.Mvc;
 using MVCTask.Core.Registers;
+using MVCTask.Filters;
+using MVCTask.Interface;
 using MVCTask.Registers;
 using StructureMap.Configuration.DSL;
 
@@ -30,8 +33,11 @@ namespace MVCTask.DependencyResolution {
             reg.IncludeRegistry<CoreRegister>(); 
             reg.IncludeRegistry<ValidatorRegister>();  
             reg.IncludeRegistry<ConfigManagerRegister>();
+            reg.IncludeRegistry<LogServiceRegister>();
+            reg.IncludeRegistry<FilterRegister>();
+            reg.Policies.SetAllProperties(x=>x.OfType<ILog>());            
             var container = new Container(reg);
-
+                        
             return container;            
         }
     }
