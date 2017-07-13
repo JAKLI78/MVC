@@ -34,10 +34,16 @@ namespace MVCTask.DependencyResolution {
             reg.IncludeRegistry<ValidatorRegister>();  
             reg.IncludeRegistry<ConfigManagerRegister>();
             reg.IncludeRegistry<LogServiceRegister>();
+            reg.Policies.SetAllProperties(x=>x.OfType<ILog>());
             reg.IncludeRegistry<FilterRegister>();
-            reg.Policies.SetAllProperties(x=>x.OfType<ILog>());            
             var container = new Container(reg);
-                        
+            container.Configure(cfg =>
+            {
+                cfg.For<IFilterProvider>()
+                .Use(new StructureMapFilterProvider((() => container))); 
+                cfg.Policies.SetAllProperties(x=>x.OfType<ILog>());
+            });
+            
             return container;            
         }
     }
