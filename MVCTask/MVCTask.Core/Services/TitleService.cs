@@ -19,7 +19,7 @@ namespace MVCTask.Core.Services
                                    $"{nameof(titleRepository)} cannot be null.");
         }
 
-        public IEnumerable<string> GetTitelsByUserId(int userId)
+        public IEnumerable<string> GetTitlesByUserId(int userId)
         {
             return _titleRepository.GetNamesByUserId(userId);
         }
@@ -36,8 +36,8 @@ namespace MVCTask.Core.Services
 
         public void UpdateUserTitles(int userId, ICollection<string> titleNames)
         {
-            var currentUserTitles = _titleRepository.GetUserTitels(userId);
-            var tmpTitels = new List<string>(titleNames);
+            var currentUserTitles = _titleRepository.GetUserTitles(userId);
+            var tmpTitles = new List<string>(titleNames);
             var titlesToDelete = new List<Title>();
             foreach (var currentUserTitle in currentUserTitles)
             {
@@ -48,12 +48,12 @@ namespace MVCTask.Core.Services
                 }
                 else
                 {
-                    tmpTitels.Remove(currentUserTitle.Name);                        
+                    tmpTitles.Remove(currentUserTitle.Name);                        
                 }                                   
             }
-            if (tmpTitels.Any())
+            if (tmpTitles.Any())
             {
-                foreach (var titleName in tmpTitels)
+                foreach (var titleName in tmpTitles)
                 {
                     if (titleName.Length > 0)
                     {

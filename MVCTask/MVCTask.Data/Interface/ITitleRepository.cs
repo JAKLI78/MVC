@@ -6,6 +6,6 @@ namespace MVCTask.Data.Interface
     public interface ITitleRepository : IRepository<Title>
     {
         IEnumerable<string> GetNamesByUserId(int userId);
-        IEnumerable<Title> GetUserTitels(int userId);
+        IEnumerable<Title> GetUserTitles(int userId);
     }
 }

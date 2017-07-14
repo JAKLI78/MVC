@@ -22,17 +22,17 @@ namespace MVCTask.Controllers
         private readonly int _maxCount;
         private readonly ISearchService _searchService;
 
-        private readonly ITitlesServise _titelsServise;
+        private readonly ITitlesServise _titlesServise;
         private readonly IUserService _userService;
 
         public IConfig ConfigManager { get; set; }
 
 
-        public UsersController(ITitlesServise titelsServise, IUserService userService,
+        public UsersController(ITitlesServise titlesServise, IUserService userService,
             ICompanyService companyService, ISearchService searchService)
         {
-            if (titelsServise == null)
-                throw new ArgumentNullException(nameof(titelsServise), $"{nameof(titelsServise)} cannot be null.");
+            if (titlesServise == null)
+                throw new ArgumentNullException(nameof(titlesServise), $"{nameof(titlesServise)} cannot be null.");
             if (userService == null)
                 throw new ArgumentNullException(nameof(userService), $"{nameof(userService)} cannot be null.");
             if (companyService == null)
@@ -43,7 +43,7 @@ namespace MVCTask.Controllers
             _companyService = companyService;
             _searchService = searchService;
             _userService = userService;
-            _titelsServise = titelsServise;
+            _titlesServise = titlesServise;
             _maxCount = int.Parse(ConfigurationManager.AppSettings["MaxCountOfUsersOnPage"]);
         }
 
@@ -130,8 +130,9 @@ namespace MVCTask.Controllers
                 else if (file != null)
                 {
                     var filePath = Path.GetFileName(file.FileName);
-                    
-                    path = Path.Combine(ConfigManager.GetSittingsValueByKey("PhotoPath"), filePath);
+
+                    if (filePath != null)
+                        path = Path.Combine(ConfigManager.GetSittingsValueByKey("PhotoPath"), filePath);
                     file.SaveAs(Server.MapPath(path));
                 }
                 if (model.Id > 0)
@@ -147,7 +148,7 @@ namespace MVCTask.Controllers
                         FileUrl = path
                     };
                     _userService.UpdateUser(userToUpdate);                    
-                    _titelsServise.UpdateUserTitles(model.Id, model.Title);                    
+                    _titlesServise.UpdateUserTitles(model.Id, model.Title);                    
                 }
                 else
                 {
@@ -163,7 +164,7 @@ namespace MVCTask.Controllers
                     _userService.CreateUser(userToCreate);
                     var uId = _userService.GetUsers().First(u => u.Email == model.Email).Id;
                     foreach (var s in model.Title)
-                        _titelsServise.CreateTitle(s, uId);
+                        _titlesServise.CreateTitle(s, uId);
                 }
 
                 return RedirectToAction("Index", "Users");
@@ -234,17 +235,18 @@ namespace MVCTask.Controllers
 
         private string GetUserTitlesNamesByOneString(ICollection<Title> titles)
         {
-            var strTitels = "";
+            string strTitles;
+            strTitles = "";
             if (titles.Any())
             {
-                strTitels = "( ";
+                strTitles = "( ";
                 foreach (var title in titles)
                 {
-                    strTitels += $"{title.Name}, ";
+                    strTitles += $"{title.Name}, ";
                 }
-                strTitels = strTitels.Remove(strTitels.LastIndexOf(","), 1) + ")";
+                strTitles = strTitles.Remove(strTitles.LastIndexOf(","), 1) + ")";
             }
-            return strTitels;
+            return strTitles;
         }
     }
 }

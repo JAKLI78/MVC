@@ -22,7 +22,7 @@ namespace MVCTask.Data.Repositores
             
         }
 
-        public IEnumerable<Title> GetUserTitels(int userId)
+        public IEnumerable<Title> GetUserTitles(int userId)
         {
             return Query().Where(t => t.UserId == userId);
         }

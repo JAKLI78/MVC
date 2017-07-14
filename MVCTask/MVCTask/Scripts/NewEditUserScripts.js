@@ -3,12 +3,12 @@
     $("#SomeTitle").append('<tr class="title_box"><td></td> <td><input type="text" name="Title[' +
         count +
         ']" value="" /></td> <td>' +
-        '<input type="button" value="Remove" id="SomeAdd" onclick="RemoveTitelInput(' +
+        '<input type="button" value="Remove" id="SomeAdd" onclick="RemoveTitleInput(' +
         count +
         ');" /></td></tr>');
 };
 
-function RemoveTitelInput(id) {
+function RemoveTitleInput(id) {
     console.log(id);
     $(".title_box:eq(" + id + ")").remove();
 };
