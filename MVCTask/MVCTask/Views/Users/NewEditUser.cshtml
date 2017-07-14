@@ -1,0 +1,115 @@
+﻿@model MVCTask.Models.NewEditUserModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet"/>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet"/>
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/NewEditUserScripts.js"></script>
+<link href="~/Content/Site.css" rel="stylesheet"/>
+<html>
+
+<head>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+<div>
+    @using (Html.BeginForm("CreateUser", "Users", FormMethod.Post, new {enctype = "multipart/form-data"}))
+    {
+        <div>@Html.EditorFor(m => m.Id)</div>
+        <div>@Html.EditorFor(m => m.StrImage)</div>
+        <ul>
+            <li class="h4">@ViewBag.Title</li>
+            <li>
+                <table>
+                    <tr>
+                        <td>Email:</td> <td>@Html.EditorFor(m => m.Email) </td> <td>
+                            @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Name:</td>
+                        <td>@Html.EditorFor(m => m.Name) </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.Name, "", new {@class = "text-danger"})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Surname:</td>
+                        <td>@Html.EditorFor(m => m.Surname) </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.Surname, "", new {@class = "text-danger"})
+                        </td>
+                    </tr>
+                </table>
+                <table id="SomeTitle">
+                    <tr class="title_box">
+                        <td>Title: </td> <td>
+                            <input type="text" name="Title[0]" value="@Model.Title.First()"/>
+                        </td>
+                        <td>
+                            <input type="button" value="Add" id="SomeAdd" onclick="AddNewTitleEdit();"/>
+                        </td>
+                    </tr>
+                    @{
+                        if (Model.Title.Count > 1)
+                        {
+                            for (var i = 1; i < Model.Title.Count; i++)
+                            {
+                                <tr class="title_box">
+                                    <td></td> <td>
+                                        <input type="text" name="Title[@i]" value="@Model.Title.ElementAt(i)"/>
+                                    </td> <td>
+                                        <input type="button" value="Remove" id="SomeAdd" onclick="RemoveTitleInput(@i);"/>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </table>
+                <table>
+                    <tr>
+                        <td>BirthDate:</td>
+                        <td>@Html.EditorFor(m => m.BirthDate, new {htmlAttributes = new {@class = "date-picker"}}) </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.BirthDate, "", new {@class = "text-danger"})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Company:</td>
+                        <td>@Html.DropDownList("CompanyId", new SelectList(Model.CompanyModels, "Id", "CompanyName", Model.CompanyId)) </td>
+                        <td>
+                            @Html.ValidationMessageFor(m => m.CompanyId, "", new {@class = "text-danger"})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Photo:</td>
+                        <td>
+                            <input type="file" name="file" id="file"/>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Create"/>
+                        </td>
+                    </tr>
+                </table>
+            </li>
+        </ul>
+    }
+
+
+
+
+</div>
+@Html.Partial("Log");
+
+</body>
+</html>
