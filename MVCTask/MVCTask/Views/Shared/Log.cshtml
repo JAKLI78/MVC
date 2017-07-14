@@ -2,9 +2,9 @@
 
     if (HttpContext.Current.Session["log"] == null)
     {
-        HttpContext.Current.Session.Add("log", "");
+        HttpContext.Current.Session.Add("log", new List<string>(){""});
     }
-    var log = HttpContext.Current.Session["log"].ToString();
+    var log = string.Join("", (List<string>)HttpContext.Current.Session["log"]);
     <p class="text-width h4">Logs</p>
     <textarea class="text-width" rows="10" >@log</textarea>
 }

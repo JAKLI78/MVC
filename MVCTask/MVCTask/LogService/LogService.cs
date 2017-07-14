@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using MVCTask.Interface;
 
 namespace MVCTask.LogService
@@ -7,13 +8,12 @@ namespace MVCTask.LogService
     {
         public  void Log(ControllerContext controllerContext, string message)
         {
-            var result = "";
-            if (controllerContext.HttpContext.Session["log"] != null)
-                result = controllerContext.HttpContext.Session["log"].ToString();
-            else
-                controllerContext.HttpContext.Session.Add("log", "");
-             
-            controllerContext.HttpContext.Session["log"] = message + result;
+
+            if (controllerContext.HttpContext.Session["log"] == null)
+            {
+                controllerContext.HttpContext.Session.Add("log", new List<string>());
+            }                
+            ((List<string>)controllerContext.HttpContext.Session["log"]).Add(message);
         }
     }
 }
