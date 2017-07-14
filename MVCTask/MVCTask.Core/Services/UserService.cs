@@ -36,7 +36,7 @@ namespace MVCTask.Core.Services
 
         public bool isUserExist(int userId)
         {
-            return _userRepository.Query().Where(u => u.Id == userId).Any();
+            return _userRepository.Query().Any(u => u.Id == userId);
         }
 
         public void DeleteUser(int userId)

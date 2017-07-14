@@ -41,7 +41,6 @@ namespace MVCTask.Core.Services
             var titlesToDelete = new List<Title>();
             foreach (var currentUserTitle in currentUserTitles)
             {
-                                
                 if (!titleNames.Contains(currentUserTitle.Name))
                 {
                     titlesToDelete.Add(currentUserTitle);

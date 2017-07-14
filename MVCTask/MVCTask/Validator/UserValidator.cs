@@ -30,10 +30,7 @@ namespace MVCTask.Validator
             RuleFor(u => u.Email).NotEmpty().EmailAddress().Must((user,email) => _userRepository.IsEmailInUse(email, user.Id)).WithMessage("This Email already in use.");
             RuleFor(u => u.BirthDate).NotEmpty();
             RuleFor(u => u.CompanyId)
-                .Must((user, companyId) =>
-                {
-                    return ValidateCompanyProperty(user, companyId);
-                })
+                .Must(ValidateCompanyProperty)
                 .WithMessage("Max count of users for this company");
         }
 
