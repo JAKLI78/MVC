@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -18,18 +17,15 @@ namespace MVCTask.Controllers
     public class UsersController : BaseController
     {
         private readonly ICompanyService _companyService;
-
-        private readonly int _maxCount;
+        private readonly IConfig _configManager;        
         private readonly ISearchService _searchService;
-
         private readonly ITitlesServise _titlesServise;
         private readonly IUserService _userService;
 
-        public IConfig ConfigManager { get; set; }
-
+        private readonly int _maxCount;
 
         public UsersController(ITitlesServise titlesServise, IUserService userService,
-            ICompanyService companyService, ISearchService searchService)
+            ICompanyService companyService, ISearchService searchService, IConfig configManager)
         {
             if (titlesServise == null)
                 throw new ArgumentNullException(nameof(titlesServise), $"{nameof(titlesServise)} cannot be null.");
@@ -39,12 +35,15 @@ namespace MVCTask.Controllers
                 throw new ArgumentNullException(nameof(companyService), $"{nameof(companyService)} cannot be null.");
             if (searchService == null)
                 throw new ArgumentNullException(nameof(searchService), $"{nameof(searchService)} cannot be null.");
+            if (configManager == null)
+                throw new ArgumentNullException(nameof(configManager), $"{nameof(configManager)} cannot be null.");
 
             _companyService = companyService;
             _searchService = searchService;
+            _configManager = configManager;
             _userService = userService;
             _titlesServise = titlesServise;
-            _maxCount = int.Parse(ConfigurationManager.AppSettings["MaxCountOfUsersOnPage"]);
+            _maxCount = int.Parse(_configManager.GetSittingsValueByKey("MaxCountOfUsersOnPage"));
         }
 
 
@@ -56,8 +55,8 @@ namespace MVCTask.Controllers
 
             return View(new UsersViewModel
             {
-                UserModels = 
-                (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount)
+                UserModels =
+                    (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount)
             });
         }
 
@@ -76,7 +75,7 @@ namespace MVCTask.Controllers
             {
                 var usersFromSearch = _searchService.FindUsers(search);
                 var users = usersFromSearch.Select(FillUser).ToList();
-                returnModel.UserModels = 
+                returnModel.UserModels =
                     (PagedList<UserModel>) users.ToPagedList(page.GetValueOrDefault(1), _maxCount);
             }
 
@@ -86,11 +85,11 @@ namespace MVCTask.Controllers
         public ActionResult NewUser(int? id)
         {
             var model = new NewEditUserModel();
-     
+
             if (id > 0)
             {
                 var userToEdit = _userService.FindUserByIdWithTitles(id.Value);
-                
+
                 ViewBag.Title = "Edit user";
                 model = new NewEditUserModel
                 {
@@ -132,12 +131,12 @@ namespace MVCTask.Controllers
                     var filePath = Path.GetFileName(file.FileName);
 
                     if (filePath != null)
-                        path = Path.Combine(ConfigManager.GetSittingsValueByKey("PhotoPath"), filePath);
+                        path = Path.Combine(_configManager.GetSittingsValueByKey("PhotoPath"), filePath);
                     file.SaveAs(Server.MapPath(path));
                 }
                 if (model.Id > 0)
                 {
-                    var userToUpdate = new User()
+                    var userToUpdate = new User
                     {
                         Id = model.Id,
                         Name = model.Name,
@@ -147,12 +146,12 @@ namespace MVCTask.Controllers
                         CompanyId = model.CompanyId,
                         FileUrl = path
                     };
-                    _userService.UpdateUser(userToUpdate);                    
-                    _titlesServise.UpdateUserTitles(model.Id, model.Title);                    
+                    _userService.UpdateUser(userToUpdate);
+                    _titlesServise.UpdateUserTitles(model.Id, model.Title);
                 }
                 else
                 {
-                    var userToCreate = new User()
+                    var userToCreate = new User
                     {
                         Name = model.Name,
                         Surname = model.Surname,
@@ -169,7 +168,7 @@ namespace MVCTask.Controllers
 
                 return RedirectToAction("Index", "Users");
             }
-            
+
             model.CompanyModels = BuildCompanyModelsForView();
             ViewBag.Title = "New user";
             if (model.Id > 0)
@@ -182,9 +181,7 @@ namespace MVCTask.Controllers
         public ActionResult DeleteUser(int id)
         {
             if (_userService.isUserExist(id))
-            {
                 _userService.DeleteUser(id);
-            }
             return Json(new {result = "Redirect", url = Url.Action("index", "Users")});
         }
 
@@ -204,10 +201,8 @@ namespace MVCTask.Controllers
         private ICollection<string> GetUserTitlesNames(ICollection<Title> titles)
         {
             if (titles.Any())
-            {
                 return new List<string>(titles.Select(t => t.Name));
-            }
-            return new List<string>(){""};
+            return new List<string> {""};
         }
 
         private List<UserModel> GetAllUsers()
@@ -227,7 +222,7 @@ namespace MVCTask.Controllers
             companyModels.AddRange(companies.Select(company => new CompanyModel
             {
                 CompanyName = company.Name,
-                Id = company.Id,                
+                Id = company.Id
             }));
 
             return companyModels;
@@ -241,9 +236,7 @@ namespace MVCTask.Controllers
             {
                 strTitles = "( ";
                 foreach (var title in titles)
-                {
                     strTitles += $"{title.Name}, ";
-                }
                 strTitles = strTitles.Remove(strTitles.LastIndexOf(","), 1) + ")";
             }
             return strTitles;
